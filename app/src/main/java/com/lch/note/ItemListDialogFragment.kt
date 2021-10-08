@@ -51,14 +51,14 @@ class ItemListDialogFragment(val mEditNoteViewModel: EditNoteViewModel,val posit
         }
         binding.insertAudio.setOnClickListener {
 
-            //mEditNoteViewModel.onInsertImg(position)
+            mEditNoteViewModel.onInsertAudio(position)
 
             dismissAllowingStateLoss()
         }
 
         binding.insertVideo.setOnClickListener {
 
-            //mEditNoteViewModel.onInsertImg(position)
+            mEditNoteViewModel.onInsertVideo(position)
 
             dismissAllowingStateLoss()
         }

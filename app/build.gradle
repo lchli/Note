@@ -26,6 +26,10 @@ android {
         versionCode 1
         versionName '1.0'
         vectorDrawables.useSupportLibrary = true
+
+        ndk {
+            abiFilters 'armeabi'
+        }
     }
 
     dataBinding {
@@ -47,6 +51,13 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['src/main/libs', 'src/main/jniLibs']
+        }
+    }
+
 }
 
 dependencies {
@@ -69,6 +80,8 @@ dependencies {
 
     implementation 'com.blankj:utilcodex:1.30.6'
     api "com.github.lchli:boxing:1.1.5"
+    api "com.github.lchli:LchAudioPlayer:+"
+    api "com.github.lchli:LchVideoPlayer:1.1.0"
 
 
 

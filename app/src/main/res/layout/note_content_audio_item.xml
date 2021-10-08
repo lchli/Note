@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.lch.audio_player.ui.SimpleAudioView
+            android:id="@+id/simpleAudioView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#abcdef"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"/>
+
+        <ImageView
+            android:id="@+id/more_op"
+            android:scaleType="centerInside"
+            android:layout_alignParentTop="true"
+          android:layout_alignParentRight="true"
+            android:src="@mipmap/outline_more_vert_white_48"
+            android:layout_width="24dp"
+            android:layout_height="24dp"/>
+
+    </RelativeLayout>
+</layout>
