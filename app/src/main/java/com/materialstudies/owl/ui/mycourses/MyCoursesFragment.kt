@@ -24,6 +24,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
+import com.blankj.utilcode.util.ToastUtils
+import com.lch.cl.FileListVm
 import com.lch.note.NoteListViewModel
 import com.materialstudies.owl.R
 import com.materialstudies.owl.databinding.FragmentMyCoursesBinding
@@ -32,9 +34,9 @@ import com.materialstudies.owl.util.SpringAddItemAnimator
 import java.util.concurrent.TimeUnit
 
 class MyCoursesFragment : Fragment() {
-    private val noteListVm: NoteListViewModel by viewModels()
-    private  val mMyCoursesAdapter=MyCoursesAdapter()
-    private lateinit var binding:FragmentMyCoursesBinding
+    private val noteListVm: FileListVm by viewModels()
+    private lateinit var mMyCoursesAdapter: MyCoursesAdapter
+    private lateinit var binding: FragmentMyCoursesBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,24 +44,7 @@ class MyCoursesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-         binding = FragmentMyCoursesBinding.inflate(inflater, container, false).apply {
-            list.apply {
-                itemAnimator = SpringAddItemAnimator()
-                addItemDecoration(
-                    BottomSpacingItemDecoration(resources.getDimensionPixelSize(R.dimen.grid_2))
-                )
-                adapter =mMyCoursesAdapter.apply {
-                    // add data after layout so that animations run
-//                    doOnNextLayout {
-//                        submitList(courses)
-//                        doOnNextLayout {
-//                            startPostponedEnterTransition()
-//                        }
-//                    }
-                }
-            }
-        }
-
+        binding = FragmentMyCoursesBinding.inflate(inflater, container, false)
 
         postponeEnterTransition(1000L, TimeUnit.MILLISECONDS)
 
@@ -69,18 +54,30 @@ class MyCoursesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        noteListVm.noteListEvent.observe(viewLifecycleOwner){list->
+        noteListVm.attachContext(requireActivity())
+        mMyCoursesAdapter = MyCoursesAdapter(noteListVm)
+
+        binding.list.apply {
+            itemAnimator = SpringAddItemAnimator()
+            addItemDecoration(
+                BottomSpacingItemDecoration(resources.getDimensionPixelSize(R.dimen.grid_2))
+            )
+            adapter = mMyCoursesAdapter
+        }
+
+        noteListVm.state.observe(viewLifecycleOwner) { list ->
             mMyCoursesAdapter.submitList(list)
 
-
             binding.list.doOnNextLayout {
-
                 startPostponedEnterTransition()
             }
 
         }
+        noteListVm.isFinished.observe(viewLifecycleOwner) {
+            ToastUtils.showLong("finished")
+        }
 
-        noteListVm.getNoteList(requireContext())
+        noteListVm.startScan()
     }
 }
 

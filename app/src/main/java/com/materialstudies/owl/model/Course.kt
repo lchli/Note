@@ -18,6 +18,7 @@ package com.materialstudies.owl.model
 
 import androidx.recyclerview.widget.DiffUtil
 import com.lch.note.NoteMetaData
+import java.io.File
 
 typealias CourseId = Long
 
@@ -33,9 +34,12 @@ data class Course(
     val instructor: String = "https://i.pravatar.cc/112?$id"
 )
 
-object CourseDiff2 : DiffUtil.ItemCallback<NoteMetaData>() {
-    override fun areItemsTheSame(oldItem: NoteMetaData, newItem: NoteMetaData) = oldItem.id == newItem.id
-    override fun areContentsTheSame(oldItem: NoteMetaData, newItem: NoteMetaData) = oldItem == newItem
+object CourseDiff2 : DiffUtil.ItemCallback<String>() {
+    override fun areItemsTheSame(oldItem: String, newItem: String) = oldItem == newItem
+    override fun areContentsTheSame(oldItem: String, newItem: String):Boolean {
+       //return File(oldItem).name == File(newItem).name
+        return oldItem == newItem
+    }
 }
 
 
