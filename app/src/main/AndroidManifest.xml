@@ -49,13 +49,13 @@
         android:value="Rubik"/>
 
     <provider
-        android:name="androidx.core.content.FileProvider"
+        android:name="com.lch.cl.AppFileProvider"
         android:authorities="${applicationId}.file.provider"
         android:exported="false"
         android:grantUriPermissions="true">
       <meta-data
           android:name="android.support.FILE_PROVIDER_PATHS"
-          android:resource="@xml/boxing_file_provider" />
+          android:resource="@xml/app_provider_path" />
     </provider>
 
 
