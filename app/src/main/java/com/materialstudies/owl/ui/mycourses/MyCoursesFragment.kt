@@ -108,9 +108,9 @@ class MyCoursesFragment : Fragment() {
         noteListVm.state.observe(viewLifecycleOwner) { list ->
             mMyCoursesAdapter.submitList(list)
 
-            binding.list.post {
-               binding.list.smoothScrollToPosition(0)
-            }
+            binding.list.postDelayed( {
+               binding.list.scrollToPosition(0)
+            },500)
 
 //            binding.list.doOnNextLayout {
 //                startPostponedEnterTransition()
