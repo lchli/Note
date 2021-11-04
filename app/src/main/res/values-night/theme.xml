@@ -15,15 +15,17 @@
 <resources>
 
   <style name="Owl.Yellow">
-    <item name="colorPrimary">@color/owl_yellow_200</item>
-    <item name="colorSecondary">@color/owl_blue_200</item>
-    <item name="colorSurface">@color/owl_yellow_dark_primary</item>
+    <item name="colorPrimary">#03A9F4</item>
+    <item name="colorPrimaryVariant">#03A9F4</item>
+    <item name="colorSecondary">#ffffff</item>
+    <item name="colorSecondaryVariant">#ffffff</item>
   </style>
 
   <style name="Owl.Blue">
-    <item name="colorPrimary">@color/owl_blue_200</item>
-    <item name="colorSecondary">@color/owl_yellow_200</item>
-    <item name="colorSurface">@color/owl_blue_dark_primary</item>
+    <item name="colorPrimary">#03A9F4</item>
+    <item name="colorPrimaryVariant">#03A9F4</item>
+    <item name="colorSecondary">#ffffff</item>
+    <item name="colorSecondaryVariant">#ffffff</item>
   </style>
 
   <style name="ThemeOverlay.Owl.Blue" parent="@style/ThemeOverlay.MaterialComponents.Dark">

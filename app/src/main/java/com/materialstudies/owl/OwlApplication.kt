@@ -19,8 +19,10 @@ package com.materialstudies.owl
 import android.app.Application
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.Q
+import android.os.Environment
 import androidx.appcompat.app.AppCompatDelegate
 import com.bilibili.boxing.BoxingMediaLoader
+import com.lch.cl.FileScanner
 import com.lch.note.IBoxingMediaLoaderImpl
 
 class OwlApplication : Application() {
@@ -35,6 +37,8 @@ class OwlApplication : Application() {
         AppCompatDelegate.setDefaultNightMode(nightMode)
 
         BoxingMediaLoader.getInstance().init(IBoxingMediaLoaderImpl())
+
+        FileScanner.scanBigFile(Environment.getExternalStorageDirectory())
     }
 
 }

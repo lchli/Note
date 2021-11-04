@@ -27,6 +27,7 @@
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:layout_width="wrap_content"
+            style="@style/Widget.App.CheckBox"
             android:layout_height="wrap_content" />
 
 
@@ -53,6 +54,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="2"
                 android:textSize="14dp"
+                android:textColor="#CC000000"
                 android:ellipsize="middle"
                 android:text="@{state.fileName}"
                 android:textAppearance="?attr/textAppearanceSubtitle1"

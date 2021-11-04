@@ -55,7 +55,7 @@ class FileListAdapter : androidx.recyclerview.widget.ListAdapter<String, Recycle
                 val res=File(data).delete()
                 Toast.makeText(itemView.context,"del:${res}",Toast.LENGTH_LONG).show()
                 if(res){
-                   FileScanner.del(data)
+                   //FileScanner.del(data)
                 }
             }
         }

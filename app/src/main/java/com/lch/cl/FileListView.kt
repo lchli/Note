@@ -41,7 +41,6 @@ class FileListView(context: Context) : FrameLayout(context), Observer<Pair<Boole
 
     fun stop() {
         FileScanner.fileState.removeObserver(this)
-        FileScanner.forceStop()
     }
 
     override fun onChanged(it: Pair<Boolean,MutableList<String>>) {

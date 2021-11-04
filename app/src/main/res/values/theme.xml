@@ -49,17 +49,27 @@
   <style name="Owl" parent="@style/Base.Owl"/>
 
   <style name="Owl.Yellow">
-    <item name="colorPrimary">@color/owl_yellow_500</item>
-    <item name="colorPrimaryVariant">@color/owl_yellow_400</item>
-    <item name="colorSecondary">@color/owl_blue_700</item>
-    <item name="colorSecondaryVariant">@color/owl_blue_800</item>
+    <item name="colorPrimary">#03A9F4</item>
+    <item name="colorPrimaryVariant">#03A9F4</item>
+    <item name="colorSecondary">#ffffff</item>
+    <item name="colorSecondaryVariant">#ffffff</item>
+  </style>
+
+
+  <style name="Widget.App.CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+    <item name="buttonTint">@color/checkbox_bg</item>
+  </style>
+
+
+  <style name="Widget.App.CheckBox.title" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+    <item name="buttonTint">@color/checkbox_bg_titlebar</item>
   </style>
 
   <style name="Owl.Blue">
-    <item name="colorPrimary">@color/owl_blue_700</item>
-    <item name="colorPrimaryVariant">@color/owl_blue_800</item>
-    <item name="colorSecondary">@color/owl_yellow_500</item>
-    <item name="colorSecondaryVariant">@color/owl_yellow_400</item>
+    <item name="colorPrimary">#03A9F4</item>
+    <item name="colorPrimaryVariant">#03A9F4</item>
+    <item name="colorSecondary">#ffffff</item>
+    <item name="colorSecondaryVariant">#ffffff</item>
   </style>
 
   <style name="ThemeOverlay.Owl.Blue" parent="@style/ThemeOverlay.MaterialComponents.Light">

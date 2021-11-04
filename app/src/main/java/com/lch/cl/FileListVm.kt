@@ -1,17 +1,15 @@
 package com.lch.cl
 
-import android.content.Context
 import android.os.Environment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import java.io.File
 
-class FileListVm:BaseVm(), Observer<Pair<Boolean,MutableList<String>>> {
-    val state = MutableLiveData<MutableList<String>>()
-    val isFinished = MutableLiveData<Boolean>(false)
+class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
+    val state = MutableLiveData<List<String>>()
+    val isFinished = MutableLiveData(false)
     private var finishedList: MutableList<String>? = null
 
     init {
@@ -19,37 +17,40 @@ class FileListVm:BaseVm(), Observer<Pair<Boolean,MutableList<String>>> {
     }
 
 
+    fun listenScan() {
+        FileScanner.sendDataChanged()
+    }
 
-
-    fun startScan(){
+    fun refresh() {
         FileScanner.scanBigFile(Environment.getExternalStorageDirectory())
     }
 
-    fun sort(type:FileSortType=FileSortType.Size(FileConst.SORT_DIRECTION_ASC)){
+
+    fun sort(type: FileSortType = FileSortType.Size(FileConst.SORT_DIRECTION_ASC)) {
 
         viewModelScope.launch {
-            if(finishedList.isNullOrEmpty()){
+            if (finishedList.isNullOrEmpty()) {
                 return@launch
             }
-            val list= mutableListOf<String>()
+            val list = mutableListOf<String>()
             list.addAll(finishedList!!)
 
-            if(type is FileSortType.Size) {
-                if(type.direction==FileConst.SORT_DIRECTION_ASC) {
+            if (type is FileSortType.Size) {
+                if (type.direction == FileConst.SORT_DIRECTION_ASC) {
                     list.sortBy {
                         File(it).length()
                     }
-                }else{
+                } else {
                     list.sortByDescending {
                         File(it).length()
                     }
                 }
-            }else if(type is FileSortType.Time){
-                if(type.direction==FileConst.SORT_DIRECTION_ASC) {
+            } else if (type is FileSortType.Time) {
+                if (type.direction == FileConst.SORT_DIRECTION_ASC) {
                     list.sortBy {
                         File(it).lastModified()
                     }
-                }else{
+                } else {
                     list.sortByDescending {
                         File(it).lastModified()
                     }
@@ -62,27 +63,34 @@ class FileListVm:BaseVm(), Observer<Pair<Boolean,MutableList<String>>> {
 
     }
 
-    fun filter(type:FileFilterType=FileFilterType.Size(10*1024*1024L)){
+    fun filter(type: FileFilterType = FileFilterType.Size(10 * 1024 * 1024L)) {
 
         viewModelScope.launch {
-            if(finishedList.isNullOrEmpty()){
+            if (finishedList.isNullOrEmpty()) {
                 return@launch
             }
-            val list= mutableListOf<String>()
-            list.addAll(finishedList!!)
 
-            if(type is FileFilterType.Size) {
-                list.filter {
-                    File(it).length()>type.length
+            if (type is FileFilterType.Size) {
+                finishedList!!.filter {
+                    File(it).length() > type.length
+                }.apply {
+                    state.postValue(this)
                 }
 
-            }else if(type is FileFilterType.Category){
-                list.filter {
+            } else if (type is FileFilterType.Category) {
+                finishedList!!.filter {
                     File(it).name.endsWith("")
+                }.apply {
+                    state.postValue(this)
+                }
+            } else if (type is FileFilterType.Date) {
+                finishedList!!.filter {
+                    File(it).lastModified()>=type.start&&File(it).lastModified()<=type.end
+                }.apply {
+                    state.postValue(this)
                 }
             }
 
-            state.postValue(list)
 
         }
 
@@ -92,15 +100,14 @@ class FileListVm:BaseVm(), Observer<Pair<Boolean,MutableList<String>>> {
     override fun onCleared() {
         super.onCleared()
         FileScanner.fileState.removeObserver(this)
-        FileScanner.forceStop()
     }
 
     override fun onChanged(it: Pair<Boolean, MutableList<String>>?) {
-        if(it==null){
+        if (it == null) {
             return
         }
-        if(it.first){
-            this.finishedList=it.second
+        if (it.first) {
+            this.finishedList = it.second
             isFinished.postValue(true)
         }
 

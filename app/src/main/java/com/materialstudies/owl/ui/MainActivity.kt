@@ -17,7 +17,6 @@
 package com.materialstudies.owl.ui
 
 import android.os.Bundle
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +28,10 @@ import com.materialstudies.owl.databinding.ActivityMainBinding
 import com.materialstudies.owl.util.contentView
 import com.materialstudies.owl.util.hide
 import com.materialstudies.owl.util.show
+import android.app.Activity
+import android.graphics.Color
+import android.os.Build
+import android.view.View
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,6 +39,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupWindow(this)
+
         binding.apply {
 
             val navController = Navigation.findNavController(this@MainActivity, R.id.nav_host)
@@ -49,6 +54,15 @@ class MainActivity : AppCompatActivity() {
                         else ->  bottomNav.hide()
                     }
                 }
+            }
+        }
+    }
+
+    private fun setupWindow(activity: Activity?) {
+        if (activity != null && activity.window != null) {
+            activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                activity.window.statusBarColor = Color.TRANSPARENT
             }
         }
     }

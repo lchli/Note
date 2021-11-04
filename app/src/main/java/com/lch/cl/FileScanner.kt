@@ -21,8 +21,8 @@ object FileScanner {
     )
     private val watchdogThread = Executors.newSingleThreadExecutor()
     private val files = mutableListOf<String>()
-    val fileState = MutableLiveData<Pair<Boolean,MutableList<String>>>()
-    private val stopFlag = AtomicBoolean(false)
+    val fileState = MutableLiveData<Pair<Boolean, MutableList<String>>>()
+    private val stopFlag = AtomicBoolean(true)
     private const val SHOW_MAX_FILE_COUNT = 500
     private val taskCount = AtomicLong(0)
 
@@ -34,7 +34,9 @@ object FileScanner {
         watchdogThread.execute {
             while (true) {
                 if (taskCount.get() == 0L && queue.isEmpty()) {
-                    sendDataChanged(true)
+                    stopFlag.set(true)
+
+                    sendDataChanged()
                     log("scan finished==========")
                     break
                 }
@@ -44,10 +46,13 @@ object FileScanner {
     }
 
 
-    @UiThread
     private fun startScan(f: File, filter: (File) -> Boolean) {
-        stopFlag.set(false)
         files.clear()
+        queue.clear()
+        taskCount.set(0)
+        stopFlag.set(false)
+
+
         sendDataChanged()
 
         addTask {
@@ -59,7 +64,6 @@ object FileScanner {
         runWatchDog()
     }
 
-    @WorkerThread
     private fun _scan(f: File, filter: (File) -> Boolean) {
         log("scanning===========")
 
@@ -68,20 +72,20 @@ object FileScanner {
         }
 
         if (f.isDirectory.not()) {
-            insertFile(f,filter)
+            insertFile(f, filter)
             return
         }
 
         f.listFiles()?.forEach { it ->
-                if (it.isDirectory.not()) {
-                    insertFile(it,filter)
-                } else {
-                    addTask(Runnable {
-                        _scan(it, filter)
-                        taskCount.decrementAndGet()
-                    })
+            if (it.isDirectory.not()) {
+                insertFile(it, filter)
+            } else {
+                addTask(Runnable {
+                    _scan(it, filter)
+                    taskCount.decrementAndGet()
+                })
 
-                }
+            }
 
         }
 
@@ -93,33 +97,54 @@ object FileScanner {
     }
 
 
-    @Synchronized
-    fun del(path: String) {
-        files.remove(path)
-
-        sendDataChanged()
-    }
-
-    @UiThread
     fun scanBigFile(f: File) {
-        startScan(f){
-            it.length()>1 * 1024 * 1024
+        if (!stopFlag.get()) {
+            log("scan already running============")
+            return
+        }
+
+        startScan(f) {
+            it.length() > 1 * 1024 * 1024
         }
     }
 
-    fun forceStop() {
+    private fun forceStop() {
         stopFlag.set(true)
+        queue.clear()
+        taskCount.set(0)
+    }
+
+    private fun removeAt(index: Int) {
+        if (stopFlag.get()) {
+            return
+        }
+        files.removeAt(index)
+    }
+
+    private fun add(index: Int, path: String) {
+        if (stopFlag.get()) {
+            return
+        }
+        files.add(index, path)
+    }
+
+    private fun get(index: Int): String {
+        return files.get(index)
     }
 
     @Synchronized
-    private fun insertFile(f: File,filter: (File) -> Boolean) {
-        if(!filter(f)){
+    private fun insertFile(f: File, filter: (File) -> Boolean) {
+        if (stopFlag.get()) {
+            return
+        }
+
+        if (!filter(f)) {
             return
         }
 
         if (files.size > SHOW_MAX_FILE_COUNT) {
-            if (f.length() > File(files.get(0)).length()) {
-                files.removeAt(0)
+            if (f.length() > File(get(0)).length()) {
+                removeAt(0)
             } else {
                 return
             }
@@ -128,7 +153,7 @@ object FileScanner {
 
         val index = searchInsert(files, f)
         if (index >= 0) {
-            files.add(index, f.absolutePath)
+            add(index, f.absolutePath)
 
             sendDataChanged()
         }
@@ -136,13 +161,18 @@ object FileScanner {
 
     }
 
-    private fun sendDataChanged(isFinished:Boolean=false) {
+    fun sendDataChanged() {
         val ret = ArrayList(files)
         ret.reverse()
-        fileState.postValue(Pair(isFinished,ret))
+        fileState.postValue(Pair(stopFlag.get(), ret))
     }
 
+
     private fun searchInsert(nums: MutableList<String>, target: File): Int {
+        if (stopFlag.get()) {
+            return 0
+        }
+
         if (nums.isEmpty()) {
             return 0
         }
@@ -159,6 +189,9 @@ object FileScanner {
         var right = nums.size - 1
 
         while (left <= right) {
+            if (stopFlag.get()) {
+                break
+            }
             val mid = (left + right) / 2
             if (File(nums[mid]).length() == target.length()) {
                 return mid
