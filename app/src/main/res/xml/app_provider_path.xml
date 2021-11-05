@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <files-path name="my_images" path="/"/>
+    <external-path name="ext" path="/" />
+    <external-files-path name="name" path="/" />
+    <cache-path name="internal" path="boxing" />
+
+    <external-path name="external" path="DCIM/bili/boxing" />
+</paths>

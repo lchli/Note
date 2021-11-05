@@ -21,7 +21,7 @@
 
   <item
       android:id="@+id/featured"
-      android:title="好看"
+      android:title="发现"
       android:icon="@drawable/asl_featured"/>
 
   <item

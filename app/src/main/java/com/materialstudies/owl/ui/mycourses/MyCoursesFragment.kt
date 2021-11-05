@@ -34,10 +34,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.lch.cl.FileConst
-import com.lch.cl.FileFilterType
-import com.lch.cl.FileListVm
-import com.lch.cl.FileSortType
+import com.lch.cl.*
 import com.lch.note.NoteListViewModel
 import com.materialstudies.owl.R
 import com.materialstudies.owl.databinding.FileOpPopupBinding
@@ -59,7 +56,6 @@ class MyCoursesFragment : Fragment() {
     ): View {
 
         binding = FragmentMyCoursesBinding.inflate(inflater, container, false)
-
 
         postponeEnterTransition(1000L, TimeUnit.MILLISECONDS)
 
@@ -115,17 +111,21 @@ class MyCoursesFragment : Fragment() {
             adapter = mMyCoursesAdapter
         }
 
-        noteListVm.state.observe(viewLifecycleOwner) { list ->
-            mMyCoursesAdapter.submitList(list)
+        noteListVm.state.observe(viewLifecycleOwner) { pair ->
+            mMyCoursesAdapter.submitList(pair.second)
 
-            binding.list.postDelayed( {
-               binding.list.scrollToPosition(0)
-            },500)
+            if (pair.first) {
+                binding.list.postDelayed({
+                    binding.list.scrollToPosition(0)
+                }, 500)
+            } else {
+                binding.list.doOnNextLayout {
+                    startPostponedEnterTransition()
 
-//            binding.list.doOnNextLayout {
-//                startPostponedEnterTransition()
-//
-//            }
+                }
+
+            }
+
 
         }
         noteListVm.isFinished.observe(viewLifecycleOwner) {
@@ -137,15 +137,16 @@ class MyCoursesFragment : Fragment() {
 
 
     private fun doFilter() {
-        val items = arrayOf("文件大小", "文件类型", "修改时间")
+        val items = arrayOf("无","文件大小", "文件类型", "修改时间")
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("选择过滤方式")
             .setItems(items) { dialog, which ->
                 when (which) {
-                    0 -> filterBySize()
-                    1 -> filterByType()
-                    2 -> filterByDate()
+                    0 -> noteListVm.filter(FileFilterType.No)
+                    1-> filterBySize()
+                    2 -> filterByType()
+                    3 -> filterByDate()
                 }
             }
             .show()
@@ -168,16 +169,19 @@ class MyCoursesFragment : Fragment() {
     }
 
     private fun filterByType() {
-        val items = arrayOf("视频","音频","图片","其它")
+        val items = arrayOf("视频", "音频", "图片", "压缩文件", "PDF", "文档", "其它")
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("选择类型")
             .setItems(items) { dialog, which ->
-                when(which){
-                    0->noteListVm.filter(FileFilterType.Category(0))
-                    1->noteListVm.filter(FileFilterType.Category(0))
-                    2->noteListVm.filter(FileFilterType.Category(0))
-                    3->noteListVm.filter(FileFilterType.Category(0))
+                when (which) {
+                    0 -> noteListVm.filter(FileFilterType.Category(Mime.Video))
+                    1 -> noteListVm.filter(FileFilterType.Category(Mime.Audio))
+                    2 -> noteListVm.filter(FileFilterType.Category(Mime.Img))
+                    3 -> noteListVm.filter(FileFilterType.Category(Mime.Zip))
+                    4 -> noteListVm.filter(FileFilterType.Category(Mime.Pdf))
+                    5 -> noteListVm.filter(FileFilterType.Category(Mime.Doc))
+                    6 -> noteListVm.filter(FileFilterType.Category(Mime.Other))
                 }
             }
             .show()
@@ -195,10 +199,10 @@ class MyCoursesFragment : Fragment() {
                 )
                 .build()
         dateRangePicker.addOnPositiveButtonClickListener {
-            noteListVm.filter(FileFilterType.Date(it.first,it.second))
+            noteListVm.filter(FileFilterType.Date(it.first, it.second))
         }
 
-        dateRangePicker.show(childFragmentManager,"date-picker")
+        dateRangePicker.show(childFragmentManager, "date-picker")
     }
 
     private fun doSort() {
@@ -207,10 +211,10 @@ class MyCoursesFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("选择排序方式")
             .setItems(items) { dialog, which ->
-               when(which){
-                   0->sortBySize()
-                   1->sortByDate()
-               }
+                when (which) {
+                    0 -> sortBySize()
+                    1 -> sortByDate()
+                }
             }
             .show()
     }
@@ -221,9 +225,9 @@ class MyCoursesFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("选择排序方式")
             .setItems(items) { dialog, which ->
-                when(which){
-                    0->noteListVm.sort(FileSortType.Time(FileConst.SORT_DIRECTION_ASC))
-                    1->noteListVm.sort(FileSortType.Time(FileConst.SORT_DIRECTION_DESC))
+                when (which) {
+                    0 -> noteListVm.sort(FileSortType.Time(FileConst.SORT_DIRECTION_ASC))
+                    1 -> noteListVm.sort(FileSortType.Time(FileConst.SORT_DIRECTION_DESC))
                 }
             }
             .show()
@@ -235,9 +239,9 @@ class MyCoursesFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("选择排序方式")
             .setItems(items) { dialog, which ->
-                when(which){
-                    0->noteListVm.sort(FileSortType.Size(FileConst.SORT_DIRECTION_ASC))
-                    1->noteListVm.sort(FileSortType.Size(FileConst.SORT_DIRECTION_DESC))
+                when (which) {
+                    0 -> noteListVm.sort(FileSortType.Size(FileConst.SORT_DIRECTION_ASC))
+                    1 -> noteListVm.sort(FileSortType.Size(FileConst.SORT_DIRECTION_DESC))
                 }
             }
             .show()

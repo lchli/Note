@@ -22,6 +22,7 @@ import android.os.Build.VERSION_CODES.Q
 import android.os.Environment
 import androidx.appcompat.app.AppCompatDelegate
 import com.bilibili.boxing.BoxingMediaLoader
+import com.lch.cl.Contexter
 import com.lch.cl.FileScanner
 import com.lch.note.IBoxingMediaLoaderImpl
 
@@ -29,6 +30,8 @@ class OwlApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        Contexter.bindContext(this)
+
         val nightMode = if (SDK_INT >= Q) {
             AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         } else {

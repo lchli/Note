@@ -4,13 +4,16 @@ import android.os.Environment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 
 class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
-    val state = MutableLiveData<List<String>>()
+    val state = MutableLiveData<Pair<Boolean, List<String>>>()
     val isFinished = MutableLiveData(false)
     private var finishedList: MutableList<String>? = null
+    private var preSort: FileSortType? = null
+    private var preFilter: FileFilterType? = null
 
     init {
         FileScanner.fileState.observeForever(this)
@@ -28,36 +31,25 @@ class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
 
     fun sort(type: FileSortType = FileSortType.Size(FileConst.SORT_DIRECTION_ASC)) {
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (finishedList.isNullOrEmpty()) {
                 return@launch
             }
-            val list = mutableListOf<String>()
-            list.addAll(finishedList!!)
+            val retlist = mutableListOf<String>()
 
-            if (type is FileSortType.Size) {
-                if (type.direction == FileConst.SORT_DIRECTION_ASC) {
-                    list.sortBy {
-                        File(it).length()
-                    }
-                } else {
-                    list.sortByDescending {
-                        File(it).length()
-                    }
-                }
-            } else if (type is FileSortType.Time) {
-                if (type.direction == FileConst.SORT_DIRECTION_ASC) {
-                    list.sortBy {
-                        File(it).lastModified()
-                    }
-                } else {
-                    list.sortByDescending {
-                        File(it).lastModified()
-                    }
-                }
+            if (preFilter != null) {
+                finishedList!!.filter {
+                    preFilter!!.isMatch(File(it))
+                }.apply { retlist.addAll(this) }
+            } else {
+                retlist.addAll(finishedList!!)
             }
 
-            state.postValue(list)
+            type.sort(retlist)
+
+            preSort=type
+
+            state.postValue(Pair(true, retlist))
 
         }
 
@@ -65,32 +57,22 @@ class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
 
     fun filter(type: FileFilterType = FileFilterType.Size(10 * 1024 * 1024L)) {
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (finishedList.isNullOrEmpty()) {
                 return@launch
             }
-
-            if (type is FileFilterType.Size) {
-                finishedList!!.filter {
-                    File(it).length() > type.length
-                }.apply {
-                    state.postValue(this)
+            finishedList!!.filter {
+                type.isMatch(File(it))
+            }.apply {
+                val ml=this.toMutableList()
+                if(preSort!=null){
+                    preSort!!.sort(ml)
                 }
 
-            } else if (type is FileFilterType.Category) {
-                finishedList!!.filter {
-                    File(it).name.endsWith("")
-                }.apply {
-                    state.postValue(this)
-                }
-            } else if (type is FileFilterType.Date) {
-                finishedList!!.filter {
-                    File(it).lastModified()>=type.start&&File(it).lastModified()<=type.end
-                }.apply {
-                    state.postValue(this)
-                }
+                preFilter=type
+
+                state.postValue(Pair(true, ml))
             }
-
 
         }
 
@@ -111,7 +93,7 @@ class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
             isFinished.postValue(true)
         }
 
-        state.postValue(it.second)
+        state.postValue(Pair(false, it.second))
     }
 
 
