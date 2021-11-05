@@ -15,6 +15,8 @@ package com.materialstudies.owl.ui.mycourses
 
 import android.graphics.Rect
 import android.os.Bundle
+import android.transition.Slide
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -95,6 +97,14 @@ class MyCoursesFragment : Fragment() {
             popupWindow.width = ConvertUtils.dp2px(150F)
             popupWindow.setBackgroundDrawable(null)
             popupWindow.elevation = 4F
+            val slideIn = Slide()
+            slideIn.slideEdge = Gravity.TOP
+            popupWindow.enterTransition = slideIn
+
+            // Slide animation for popup window exit transition
+            val slideOut = Slide()
+            slideOut.slideEdge = Gravity.TOP
+            popupWindow.exitTransition = slideOut
             popupWindow.showAsDropDown(it)
         }
         binding.list.apply {
