@@ -121,6 +121,7 @@ object FileScanner {
         files.removeAt(index)
     }
 
+
     private fun add(index: Int, path: String) {
         if (stopFlag.get()) {
             return
@@ -165,6 +166,21 @@ object FileScanner {
         val ret = ArrayList(files)
         ret.reverse()
         fileState.postValue(Pair(stopFlag.get(), ret))
+    }
+
+    fun del(path:String):Boolean{//repeat file.todo
+        if (!stopFlag.get()) {
+            return false
+        }
+        File(path).delete()
+        if(File(path).exists()){
+            return false
+        }
+        files.remove(path)
+
+        sendDataChanged()
+
+        return true
     }
 
 

@@ -5,6 +5,7 @@
     <data>
 
         <import type="androidx.lifecycle.MutableLiveData" />
+
         <variable
             name="state"
             type="MutableLiveData&lt;com.lch.cl.FileDetailUiState>" />
@@ -34,6 +35,7 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:onClick="@{v->state.backClick(v)}"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:src="@mipmap/outline_arrow_back_white_48" />
@@ -46,54 +48,101 @@
             android:layout_weight="1"
             android:background="#FF1C1C1C"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp">
 
             <ImageView
-                android:layout_width="50dp"
-                app:placeHolder="@{state.typeIcon}"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="50dp"
                 app:path="@{state.filePath}"
-                android:layout_height="50dp"
-                android:layout_marginTop="50dp" />
+                app:placeHolder="@{state.typeIcon}" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:text="@{state.fileName}"
                 android:layout_marginTop="20dp"
-                android:textColor="#ffffff" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="文件名称："
+                    android:textColor="#ffffff" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{state.fileName}"
+                    android:textColor="#ffffff" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:text="@{state.fileSize}"
                 android:layout_marginTop="20dp"
-                android:textColor="#ffffff" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="文件大小："
+                    android:textColor="#ffffff" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{state.fileSize}"
+                    android:textColor="#ffffff" />
+            </LinearLayout>
 
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:text="@{state.filePath}"
                 android:layout_marginTop="20dp"
-                android:textColor="#ffffff" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="文件路径："
+                    android:textColor="#ffffff" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{state.filePath}"
+                    android:textColor="#ffffff" />
+
+            </LinearLayout>
 
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="20dp"
-                android:text="@{state.fileDate}"
-                android:textColor="#ffffff" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="修改时间："
+                    android:textColor="#ffffff" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{state.fileDate}"
+                    android:textColor="#ffffff" />
+
+            </LinearLayout>
 
 
         </LinearLayout>
 
-
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#FF4A4A4A"
@@ -102,47 +151,71 @@
             android:paddingVertical="5dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:gravity="center"
+                android:onClick="@{v->state.openClick(v)}"
                 android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@drawable/folder_open" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="删除"
-                    android:textColor="#ffffff" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@mipmap/ic_launcher" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:text="打开"
                     android:textColor="#ffffff" />
             </LinearLayout>
 
-        </RelativeLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:onClick="@{v->state.sendClick(v)}"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/send_outline" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="发送"
+                    android:textColor="#ffffff" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:onClick="@{v->state.deleteClick(v)}"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/delete_alert_outline" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="删除"
+                    android:textColor="#ffffff" />
+            </LinearLayout>
+
+
+
+        </LinearLayout>
 
     </LinearLayout>
 </layout>

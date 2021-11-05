@@ -67,6 +67,8 @@ class NoteContentListFragment:BaseAppFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mFileDetailVm.attachContext(requireActivity())
+
         binding.lifecycleOwner=viewLifecycleOwner
         binding.state=mFileDetailVm.state
 
