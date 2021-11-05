@@ -26,7 +26,7 @@ class FileListUiState(val filePath: String, val vm: FileListVm) {
         val extras = FragmentNavigatorExtras(
             view to "shared_element"
         )
-        val action = MyCoursesFragmentDirections.actionOnboardingToLearn("courseId")
+        val action = MyCoursesFragmentDirections.actionOnboardingToLearn(filePath)
         view.findNavController().navigate(action, extras)
     }
 
