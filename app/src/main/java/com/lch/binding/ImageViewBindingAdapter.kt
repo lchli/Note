@@ -22,7 +22,7 @@ object ImageViewBindingAdapter {
 
 
 
-@BindingAdapter(value = ["app:path","app:placeHolder"])
+@BindingAdapter(value = ["path","placeHolder"])
 fun ImageView.path(path: String?,ph:Drawable?) {
     Glide.with(this).load(path).placeholder(ph).into(this)
 }
