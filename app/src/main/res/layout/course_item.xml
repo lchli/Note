@@ -36,7 +36,8 @@
             android:layout_height="40dp"
             android:layout_marginLeft="0dp"
             android:scaleType="centerCrop"
-            android:src="@{state.typeIcon}"
+            app:path="@{state.filePath}"
+            app:placeHolder="@{state.typeIcon}"
             app:srcCompat="@drawable/stroked_course_image_placeholder" />
 
         <Space

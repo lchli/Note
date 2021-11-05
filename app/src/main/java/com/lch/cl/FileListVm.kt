@@ -11,7 +11,7 @@ import java.io.File
 class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
     val state = MutableLiveData<Pair<Boolean, List<String>>>()
     val isFinished = MutableLiveData(false)
-    private var finishedList: MutableList<String>? = null
+    private var finishedList: List<String>? = null
     private var preSort: FileSortType? = null
     private var preFilter: FileFilterType? = null
 
@@ -25,6 +25,8 @@ class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
     }
 
     fun refresh() {
+        preSort=null
+        preFilter=null
         FileScanner.scanBigFile(Environment.getExternalStorageDirectory())
     }
 
@@ -88,12 +90,20 @@ class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
         if (it == null) {
             return
         }
-        if (it.first) {
+        if (it.first) {//finished
             this.finishedList = it.second
             isFinished.postValue(true)
         }
+        var retlist=it.second
 
-        state.postValue(Pair(false, it.second))
+        preFilter?.apply {
+            retlist= retlist.filter {
+                isMatch(File(it))
+            } as MutableList<String>
+        }
+        preSort?.sort(retlist)
+
+        state.postValue(Pair(false, retlist))
     }
 
 
