@@ -164,6 +164,10 @@ object FileScanner {
 
     }
 
+    fun isHaveData():Boolean{
+        return files.isNotEmpty()
+    }
+
     fun sendDataChanged() {
         val ret = ArrayList(files)
         ret.reverse()

@@ -1,12 +1,18 @@
 package com.lch.cl
 import android.content.Context
+import android.content.Intent
 import android.text.SpannableStringBuilder
 import android.text.TextPaint
+import android.text.style.ClickableSpan
 import android.text.style.URLSpan
+import android.util.Log
+import android.view.View
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
+import com.blankj.utilcode.util.ToastUtils
 import com.materialstudies.owl.R
+import com.materialstudies.owl.util.log
 
 object ProtoHelper {
 
@@ -39,10 +45,22 @@ object ProtoHelper {
         @ColorRes colorResId: Int,
         underLine: Boolean
     ) {
+        log("URLSpan:"+urlSpan.url)
         val start = clickableHtmlBuilder.getSpanStart(urlSpan)
         val end = clickableHtmlBuilder.getSpanEnd(urlSpan)
         val flags = clickableHtmlBuilder.getSpanFlags(urlSpan)
-        val span: URLSpan = object : URLSpan(urlSpan.url) {
+        val span: ClickableSpan = object : ClickableSpan() {
+
+            override fun onClick(v: View) {
+               log("onclcik:"+urlSpan.url)
+
+                if(urlSpan.url.equals(v.context.getString(R.string.user_proto))){
+                    ProtoActivity.start(v.context,"用户协议",v.resources.getString(R.string.user_proto_detail))
+                }else if(urlSpan.url.equals(v.context.getString(R.string.pri_proto))){
+                    ProtoActivity.start(v.context,"隐私政策",v.resources.getString(R.string.pri_proto_detail))
+                }
+
+            }
 
             override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
@@ -53,6 +71,8 @@ object ProtoHelper {
 
             }
         }
+        clickableHtmlBuilder.removeSpan(urlSpan)
+
         clickableHtmlBuilder.setSpan(span, start, end, flags)
     }
 }

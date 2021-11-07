@@ -78,6 +78,9 @@
 
   </fragment>
 
+
+
+
   <fragment
       android:id="@+id/proto"
       android:name="com.lch.cl.ProtoFragment"

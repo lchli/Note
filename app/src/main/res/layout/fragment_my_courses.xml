@@ -113,6 +113,20 @@
 
     </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/empty_container"
+            android:layout_width="match_parent"
+           android:gravity="center"
+            android:visibility="gone"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="扫描文件需要授予手机存储权限，请点击开启授权"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
 
         <FrameLayout
             android:id="@+id/loading_container"

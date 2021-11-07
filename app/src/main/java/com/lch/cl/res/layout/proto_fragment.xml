@@ -48,11 +48,17 @@
         </RelativeLayout>
 
 
-        <TextView
-            android:id="@+id/proto_content"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
 
+
+            <TextView
+                android:id="@+id/proto_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:lineHeight="30dp" />
+        </ScrollView>
 
     </LinearLayout>
 </layout>

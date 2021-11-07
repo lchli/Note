@@ -23,14 +23,10 @@ class SettingVm : BaseVm() {
     }
 
     fun userProtoClick(v:View){
-
-        val action = SearchFragmentDirections.actionSettingToProto("用户协议",v.resources.getString(R.string.user_proto))
-        v.findNavController().navigate(action)
+        ProtoActivity.start(v.context,"用户协议",v.resources.getString(R.string.user_proto_detail))
     }
 
     fun privacyProtoClick(v:View){
-
-        val action = SearchFragmentDirections.actionSettingToProto("隐私政策",v.resources.getString(R.string.pri_proto))
-        v.findNavController().navigate(action)
+        ProtoActivity.start(v.context,"隐私政策",v.resources.getString(R.string.pri_proto_detail))
     }
 }

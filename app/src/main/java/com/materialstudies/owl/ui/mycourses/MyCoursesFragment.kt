@@ -13,8 +13,14 @@
  */
 package com.materialstudies.owl.ui.mycourses
 
+import android.Manifest
+import android.app.Dialog
+import android.content.Intent
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings
 import android.transition.Slide
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -22,15 +28,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.annotation.Px
+import androidx.core.app.ActivityCompat
 import androidx.core.util.Pair
 import androidx.core.view.doOnNextLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
-import com.blankj.utilcode.util.BarUtils
-import com.blankj.utilcode.util.ConvertUtils
-import com.blankj.utilcode.util.ToastUtils
+import com.blankj.utilcode.util.*
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -48,7 +53,8 @@ class MyCoursesFragment : Fragment() {
     private val noteListVm: FileListVm by viewModels()
     private lateinit var mMyCoursesAdapter: MyCoursesAdapter
     private lateinit var binding: FragmentMyCoursesBinding
-    private val loading=LoadingHelper()
+    private val loading = LoadingHelper()
+    private var dialog:Dialog?=null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,7 +64,7 @@ class MyCoursesFragment : Fragment() {
         binding = FragmentMyCoursesBinding.inflate(inflater, container, false)
 
         postponeEnterTransition(1000L, TimeUnit.MILLISECONDS)
-        loading.container=binding.loadingContainer
+        loading.container = binding.loadingContainer
 
         return binding.root
     }
@@ -67,8 +73,12 @@ class MyCoursesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         noteListVm.attachContext(requireActivity())
-        binding.lifecycleOwner=viewLifecycleOwner
-        binding.vm=noteListVm
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.vm = noteListVm
+
+        binding.emptyContainer.setOnClickListener {
+            showNoPermission()
+        }
 
         mMyCoursesAdapter = MyCoursesAdapter(noteListVm)
 
@@ -115,7 +125,15 @@ class MyCoursesFragment : Fragment() {
             adapter = mMyCoursesAdapter
         }
 
+
         noteListVm.state.observe(viewLifecycleOwner) { pair ->
+            if (hasSdPermission().not()) {
+                binding.emptyContainer.visibility=View.VISIBLE
+                return@observe
+            }
+
+            binding.emptyContainer.visibility=View.GONE
+
             mMyCoursesAdapter.submitList(pair.second)
 
             if (pair.first) {
@@ -132,30 +150,110 @@ class MyCoursesFragment : Fragment() {
 
 
         }
+
         noteListVm.loading.observe(viewLifecycleOwner) {
-            if(it){
-                loading.showLoading(requireActivity(),"正在扫描中，请稍等...")
-            }else{
+            if (it) {
+                loading.showLoading(requireActivity(), "正在扫描中，请稍等...")
+            } else {
                 loading.hideLoading()
             }
         }
-        noteListVm.checkedLive.observe(viewLifecycleOwner){
+        noteListVm.checkedLive.observe(viewLifecycleOwner) {
             mMyCoursesAdapter.notifyDataSetChanged()
         }
 
-        noteListVm.listenScan()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        tryRefresh()
+    }
+
+    private fun tryRefresh(){
+        if(hasSdPermission()){
+            noteListVm.listenScan()
+        }
+    }
+
+    private fun showNoPermission() {
+        if(dialog!=null&&dialog!!.isShowing){
+            return
+        }
+
+        dialog=MaterialAlertDialogBuilder(requireActivity())
+            .setTitle("提示")
+            .setMessage("文件扫描需要授权读取手机存储的权限，是否继续？")
+            .setOnDismissListener {
+                dialog=null
+            }
+            .setNegativeButton("取消") { dialog, which ->
+                dialog.dismiss()
+            }
+            .setPositiveButton("继续") { dialog, which ->
+                openPermission()
+                dialog.dismiss()
+            }.create()
+
+        dialog?.show()
+
+
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dialog?.dismiss()
+    }
+
+    private fun openPermission() {
+        if (Build.VERSION.SDK_INT < 30) {
+            if(!ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE)&&
+                SPUtils.getInstance().getBoolean(SpKey.is_per_denyed,false)){
+                PermissionUtils.launchAppDetailsSettings()
+                return
+            }
+            PermissionUtils.permission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .callback(object : PermissionUtils.FullCallback {
+                    override fun onGranted(granted: MutableList<String>) {
+                        tryRefresh()
+                    }
+
+                    override fun onDenied(
+                        deniedForever: MutableList<String>,
+                        denied: MutableList<String>
+                    ) {
+                        ToastUtils.showLong("授权失败")
+                        SPUtils.getInstance().put(SpKey.is_per_denyed,true)
+                    }
+
+                }).request()
+
+            return
+        }
+
+
+        val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+        startActivity(intent)
+    }
+
+    private fun hasSdPermission(): Boolean {
+        if (Build.VERSION.SDK_INT < 30) {
+            return PermissionUtils.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+        return Environment.isExternalStorageManager()
+
     }
 
 
     private fun doFilter() {
-        val items = arrayOf("无","文件大小", "文件类型", "修改时间")
+        val items = arrayOf("无", "文件大小", "文件类型", "修改时间")
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("选择过滤方式")
             .setItems(items) { dialog, which ->
                 when (which) {
                     0 -> noteListVm.filter(FileFilterType.No)
-                    1-> filterBySize()
+                    1 -> filterBySize()
                     2 -> filterByType()
                     3 -> filterByDate()
                 }
@@ -260,7 +358,9 @@ class MyCoursesFragment : Fragment() {
     }
 
     private fun doRefresh() {
-        noteListVm.refresh()
+        if(hasSdPermission()) {
+            noteListVm.refresh()
+        }
     }
 }
 

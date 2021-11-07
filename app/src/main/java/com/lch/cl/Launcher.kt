@@ -13,7 +13,7 @@ class Launcher: AppCompatActivity() {
         if(SPUtils.getInstance().getBoolean(SpKey.is_proto_agreed,false)){
             startActivity(Intent(this,Splash::class.java))
         }else{
-            startActivity(Intent(this,ProtoActivity::class.java))
+            startActivity(Intent(this,ProtoDialogActivity::class.java))
         }
 
         finish()

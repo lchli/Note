@@ -36,8 +36,27 @@ android {
         enabled true
     }
 
+    signingConfigs {
+        release {
+            keyAlias = "clean"
+            keyPassword = "878266"
+            storeFile = file("sig.jks")
+            storePassword = "878266"
+            storeType = "jks"
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
+            debuggable false
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            signingConfig signingConfigs.release
+            debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
