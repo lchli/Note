@@ -20,30 +20,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.doOnNextLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.lch.cl.SettingVm
 import com.materialstudies.owl.databinding.FragmentSearchBinding
-import com.materialstudies.owl.model.topics
-import com.materialstudies.owl.util.SpringAddItemAnimator
 
 class SearchFragment : Fragment() {
+    private lateinit var binding:FragmentSearchBinding
+    private val vm: SettingVm by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentSearchBinding.inflate(inflater, container, false).apply {
-            searchResults.apply {
-                itemAnimator = SpringAddItemAnimator()
-                adapter = SearchAdapter().apply {
-                    // add data after layout so that animations run
-                    doOnNextLayout {
-                        submitList(topics)
-                    }
-                }
-            }
+         binding = FragmentSearchBinding.inflate(inflater, container, false).apply {
+
         }
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner=viewLifecycleOwner
+        binding.state=vm
+
     }
 }

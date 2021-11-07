@@ -13,25 +13,21 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import com.blankj.utilcode.util.TimeUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.materialstudies.owl.BuildConfig
 import com.materialstudies.owl.R
 import com.materialstudies.owl.ui.mycourses.MyCoursesFragmentDirections
 import com.materialstudies.owl.util.log
 import java.io.File
 
-class FileDetailUiState(val filePath: String, val vm: FileDetailVm) {
+class FileDetailUiState(val filePath: String, private val vm: FileDetailVm) {
 
     fun backClick(view: View) {
-        view.findNavController().navigateUp()
+        vm.backClick(view)
     }
 
-    fun deleteClick(view: View) {
-       if(FileScanner.del(filePath)){
-           ToastUtils.showLong("删除成功")
-           backClick(view)
-       }else{
-           ToastUtils.showLong("删除失败")
-       }
+    fun showDelDialog(v: View) {
+        vm.showDelDialog(v, filePath)
     }
 
     fun sendClick(v: View) {
@@ -53,16 +49,25 @@ class FileDetailUiState(val filePath: String, val vm: FileDetailVm) {
         }
         intent.type = File(filePath).mimeType()
 
-        ( v.context as? Activity)?.startActivityForResult(intent, 101)
+        (v.context as? Activity)?.startActivityForResult(intent, 101)
     }
 
-    fun openClick(v:View){
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.type = File(filePath).mimeType()
-        intent.data = FileProvider.getUriForFile(v.context,
-            "${BuildConfig.APPLICATION_ID}.file.provider",File(filePath))
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        v.context.startActivity(intent)
+    fun openClick(v: View) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.addCategory("android.intent.category.DEFAULT");
+            intent.type = File(filePath).mimeType()
+            intent.data = FileProvider.getUriForFile(
+                v.context,
+                "${BuildConfig.APPLICATION_ID}.file.provider", File(filePath)
+            )
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            v.context.startActivity(intent)
+        } catch (e: Throwable) {
+            e.printStackTrace()
+            ToastUtils.showLong("未找到能打开文件的应用")
+        }
     }
 
     val fileName: String? by lazy {

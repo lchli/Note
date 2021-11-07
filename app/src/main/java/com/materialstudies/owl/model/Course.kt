@@ -34,13 +34,7 @@ data class Course(
     val instructor: String = "https://i.pravatar.cc/112?$id"
 )
 
-object CourseDiff2 : DiffUtil.ItemCallback<String>() {
-    override fun areItemsTheSame(oldItem: String, newItem: String) = oldItem == newItem
-    override fun areContentsTheSame(oldItem: String, newItem: String):Boolean {
-       //return File(oldItem).name == File(newItem).name
-        return oldItem == newItem
-    }
-}
+
 
 
 object CourseDiff : DiffUtil.ItemCallback<Course>() {

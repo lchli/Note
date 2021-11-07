@@ -15,6 +15,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="vm"
+            type="com.lch.cl.FileListVm" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -45,6 +56,9 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:textSize="16sp"
+                android:alpha="@{vm.delAlpha}"
+                android:enabled="@{vm.delEnable}"
+                android:onClick="@{v->vm.showDelDialog(v)}"
                 android:text="删除" />
 
             <TextView
@@ -55,7 +69,7 @@
                 android:layout_marginLeft="10dp"
                 android:textSize="12sp"
                 android:layout_toRightOf="@+id/del"
-                android:text="已选择100项" />
+                android:text="@{vm.checkedCount}" />
 
 
             <com.google.android.material.checkbox.MaterialCheckBox
@@ -64,6 +78,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/more"
                 style="@style/Widget.App.CheckBox.title"
+                android:onCheckedChanged="@{(view,isChecked)->vm.checkedChanged(view,isChecked)}"
                 android:textColor="#ffffff"
                 android:text="全选" />
 
@@ -97,5 +112,13 @@
 
 
     </LinearLayout>
+
+
+        <FrameLayout
+            android:id="@+id/loading_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </RelativeLayout>
 
 </layout>

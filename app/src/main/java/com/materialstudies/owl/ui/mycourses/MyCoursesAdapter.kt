@@ -19,21 +19,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.lch.cl.FileListUiState
 import com.lch.cl.FileListVm
-import com.lch.note.NoteMetaData
 import com.materialstudies.owl.R
 import com.materialstudies.owl.databinding.CourseItemBinding
-import com.materialstudies.owl.model.Course
-import com.materialstudies.owl.model.CourseDiff
-import com.materialstudies.owl.model.CourseDiff2
-import com.materialstudies.owl.model.CourseId
 import com.materialstudies.owl.util.ShapeAppearanceTransformation
 
-class MyCoursesAdapter(val vm: FileListVm) : ListAdapter<String, MyCoursesAdapter.MyCourseViewHolder>(CourseDiff2) {
+class MyCoursesAdapter(val vm: FileListVm) : ListAdapter<String, MyCoursesAdapter.MyCourseViewHolder>(CourseDiff2(vm)) {
+
+     class CourseDiff2(private val vm: FileListVm) : DiffUtil.ItemCallback<String>() {
+        override fun areItemsTheSame(oldItem: String, newItem: String) = oldItem == newItem
+        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+            // return File(oldItem).name == File(newItem).name
+            return oldItem == newItem && vm.isChecked(oldItem)==vm.isChecked(newItem)
+        }
+    }
 
     private object onClick : CourseViewClick {
         override fun onClick(view: View, courseId: String) {

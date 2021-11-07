@@ -25,11 +25,19 @@ import com.bilibili.boxing.BoxingMediaLoader
 import com.lch.cl.Contexter
 import com.lch.cl.FileScanner
 import com.lch.note.IBoxingMediaLoaderImpl
+import java.io.File
 
 class OwlApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        Thread.currentThread().setUncaughtExceptionHandler(object:Thread.UncaughtExceptionHandler{
+            override fun uncaughtException(t: Thread, e: Throwable) {
+                e.printStackTrace()
+            }
+
+
+        })
         Contexter.bindContext(this)
 
         val nightMode = if (SDK_INT >= Q) {
@@ -42,6 +50,11 @@ class OwlApplication : Application() {
         BoxingMediaLoader.getInstance().init(IBoxingMediaLoaderImpl())
 
         FileScanner.scanBigFile(Environment.getExternalStorageDirectory())
+
+
+
+
+
     }
 
 }

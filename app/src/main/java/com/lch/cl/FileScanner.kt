@@ -1,5 +1,6 @@
 package com.lch.cl
 
+import android.os.Environment
 import android.os.SystemClock
 import android.util.Log
 import androidx.annotation.UiThread
@@ -23,11 +24,11 @@ object FileScanner {
     private val files = mutableListOf<String>()
     val fileState = MutableLiveData<Pair<Boolean, MutableList<String>>>()
     private val stopFlag = AtomicBoolean(true)
-    private const val SHOW_MAX_FILE_COUNT = 500
+    private const val SHOW_MAX_FILE_COUNT = 1000
     private val taskCount = AtomicLong(0)
 
     private fun log(msg: String?) {
-        Log.e("sss", "${msg}")
+        //Log.e("sss", "${msg}")
     }
 
     private fun runWatchDog() {
@@ -106,6 +107,7 @@ object FileScanner {
         startScan(f) {
             it.length() > 1 * 1024 * 1024
         }
+
     }
 
     private fun forceStop() {
@@ -181,6 +183,24 @@ object FileScanner {
         sendDataChanged()
 
         return true
+    }
+
+    fun delMulti(list:MutableList<String>){
+        if (!stopFlag.get()) {
+            return
+        }
+        if(list.isNullOrEmpty()){
+            return
+        }
+
+        list.forEach {
+            File(it).delete()
+            if(!File(it).exists()){
+                files.remove(it)
+            }
+        }
+
+        sendDataChanged()
     }
 
 

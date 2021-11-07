@@ -48,16 +48,17 @@ class MyCoursesFragment : Fragment() {
     private val noteListVm: FileListVm by viewModels()
     private lateinit var mMyCoursesAdapter: MyCoursesAdapter
     private lateinit var binding: FragmentMyCoursesBinding
+    private val loading=LoadingHelper()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = FragmentMyCoursesBinding.inflate(inflater, container, false)
 
         postponeEnterTransition(1000L, TimeUnit.MILLISECONDS)
+        loading.container=binding.loadingContainer
 
         return binding.root
     }
@@ -66,6 +67,9 @@ class MyCoursesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         noteListVm.attachContext(requireActivity())
+        binding.lifecycleOwner=viewLifecycleOwner
+        binding.vm=noteListVm
+
         mMyCoursesAdapter = MyCoursesAdapter(noteListVm)
 
         binding.statusBar.apply {
@@ -128,8 +132,15 @@ class MyCoursesFragment : Fragment() {
 
 
         }
-        noteListVm.isFinished.observe(viewLifecycleOwner) {
-            ToastUtils.showLong("finished")
+        noteListVm.loading.observe(viewLifecycleOwner) {
+            if(it){
+                loading.showLoading(requireActivity(),"正在扫描中，请稍等...")
+            }else{
+                loading.hideLoading()
+            }
+        }
+        noteListVm.checkedLive.observe(viewLifecycleOwner){
+            mMyCoursesAdapter.notifyDataSetChanged()
         }
 
         noteListVm.listenScan()
@@ -169,7 +180,7 @@ class MyCoursesFragment : Fragment() {
     }
 
     private fun filterByType() {
-        val items = arrayOf("视频", "音频", "图片", "压缩文件", "PDF", "文档", "其它")
+        val items = arrayOf("视频", "音频", "图片", "压缩文件", "PDF", "文档", "apk", "其它")
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("选择类型")
@@ -181,7 +192,8 @@ class MyCoursesFragment : Fragment() {
                     3 -> noteListVm.filter(FileFilterType.Category(Mime.Zip))
                     4 -> noteListVm.filter(FileFilterType.Category(Mime.Pdf))
                     5 -> noteListVm.filter(FileFilterType.Category(Mime.Doc))
-                    6 -> noteListVm.filter(FileFilterType.Category(Mime.Other))
+                    6 -> noteListVm.filter(FileFilterType.Category(Mime.Apk))
+                    7 -> noteListVm.filter(FileFilterType.Category(Mime.Other))
                 }
             }
             .show()

@@ -64,10 +64,18 @@ sealed class Mime {
 
     }
 
+    object Apk : Mime() {
+        override fun isMatch(f: File): Boolean {
+            val type = f.mimeType() ?: return false
+            return type.startsWith("application/vnd.android.package-archive")
+        }
+
+    }
+
     object Other : Mime() {
         override fun isMatch(f: File): Boolean {
             if( Video.isMatch(f)||Audio.isMatch(f)||Zip.isMatch(f)||
-                    Pdf.isMatch(f)||Doc.isMatch(f)||Img.isMatch(f)){
+                    Pdf.isMatch(f)||Doc.isMatch(f)||Img.isMatch(f)||Apk.isMatch(f)){
                 return false
             }
 

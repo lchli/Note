@@ -1,40 +1,74 @@
 package com.lch.cl
 
+import android.app.Activity
 import android.os.Environment
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.viewModelScope
+import android.view.View
+import android.widget.CompoundButton
+import androidx.lifecycle.*
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 
 class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
     val state = MutableLiveData<Pair<Boolean, List<String>>>()
-    val isFinished = MutableLiveData(false)
+    val loading = MutableLiveData(false)
+    val checkedLive = MutableLiveData<MutableList<String>>()
     private var finishedList: List<String>? = null
     private var preSort: FileSortType? = null
     private var preFilter: FileFilterType? = null
+    private val checked = mutableListOf<String>()
+    val checkedCount: LiveData<String> = Transformations.map(checkedLive) {
+        "已选择${it.size}项"
+    }
+
+    val delEnable: LiveData<Boolean> = Transformations.map(checkedLive) {
+        it.isNotEmpty()
+    }
+
+    val delAlpha: LiveData<Float> = Transformations.map(checkedLive) {
+        if (it.isNotEmpty()) {
+            return@map 1.0F
+        }
+        return@map 0.7F
+    }
 
     init {
         FileScanner.fileState.observeForever(this)
+        checkedLive.value = checked
     }
 
+    fun isChecked(path: String): Boolean = checked.contains(path)
+
+
+    fun checkedChanged(view: CompoundButton, isChecked: Boolean) {
+        if (isChecked) {
+            checkedAll()
+        } else {
+            uncheckedAll()
+        }
+
+    }
 
     fun listenScan() {
+        loading.value = true
         FileScanner.sendDataChanged()
     }
 
     fun refresh() {
-        preSort=null
-        preFilter=null
+        loading.value = true
+        preSort = null
+        preFilter = null
         FileScanner.scanBigFile(Environment.getExternalStorageDirectory())
     }
 
 
     fun sort(type: FileSortType = FileSortType.Size(FileConst.SORT_DIRECTION_ASC)) {
+        loading.postValue(true)
 
         viewModelScope.launch(Dispatchers.IO) {
             if (finishedList.isNullOrEmpty()) {
+                loading.postValue(false)
                 return@launch
             }
             val retlist = mutableListOf<String>()
@@ -49,32 +83,37 @@ class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
 
             type.sort(retlist)
 
-            preSort=type
+            preSort = type
 
             state.postValue(Pair(true, retlist))
+            loading.postValue(false)
 
         }
 
     }
 
     fun filter(type: FileFilterType = FileFilterType.Size(10 * 1024 * 1024L)) {
+        loading.postValue(true)
 
         viewModelScope.launch(Dispatchers.IO) {
             if (finishedList.isNullOrEmpty()) {
+                loading.postValue(false)
                 return@launch
             }
             finishedList!!.filter {
                 type.isMatch(File(it))
             }.apply {
-                val ml=this.toMutableList()
-                if(preSort!=null){
+                val ml = this.toMutableList()
+                if (preSort != null) {
                     preSort!!.sort(ml)
                 }
 
-                preFilter=type
+                preFilter = type
 
                 state.postValue(Pair(true, ml))
             }
+
+            loading.postValue(false)
 
         }
 
@@ -92,18 +131,80 @@ class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
         }
         if (it.first) {//finished
             this.finishedList = it.second
-            isFinished.postValue(true)
+            loading.postValue(false)
         }
-        var retlist=it.second
+        var retlist = it.second
 
         preFilter?.apply {
-            retlist= retlist.filter {
+            retlist = retlist.filter {
                 isMatch(File(it))
             } as MutableList<String>
         }
         preSort?.sort(retlist)
 
         state.postValue(Pair(false, retlist))
+    }
+
+
+    fun checked(path: String) {
+        if (!checked.contains(path)) {
+            checked.add(path)
+
+            checkedLive.postValue(checked)
+        }
+
+    }
+
+    fun uncheked(path: String) {
+        checked.remove(path)
+
+        checkedLive.postValue(checked)
+    }
+
+    fun checkedAll() {
+        val p = state.value ?: return
+        checked.clear()
+        checked.addAll(p.second)
+
+        checkedLive.postValue(checked)
+    }
+
+    fun uncheckedAll() {
+        checked.clear()
+
+        checkedLive.postValue(checked)
+    }
+
+    private fun deleteChecked() {
+        if (checked.isNullOrEmpty()) {
+            return
+        }
+
+        loading.postValue(true)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            FileScanner.delMulti(checked)
+
+            loading.postValue(false)
+        }
+
+    }
+
+    fun showDelDialog(v: View) {
+        if (context !is Activity) {
+            return
+        }
+        MaterialAlertDialogBuilder(context!!)
+            .setTitle("提示")
+            .setMessage("文件删除后将无法恢复，是否继续？")
+            .setNegativeButton("取消") { dialog, which ->
+                dialog.dismiss()
+            }
+            .setPositiveButton("确定") { dialog, which ->
+                deleteChecked()
+                dialog.dismiss()
+            }
+            .show()
     }
 
 

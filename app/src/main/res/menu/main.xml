@@ -16,7 +16,7 @@
 
   <item
       android:id="@+id/onboarding"
-      android:title="文件"
+      android:title="清理"
       android:icon="@drawable/asl_my_courses"/>
 
   <item

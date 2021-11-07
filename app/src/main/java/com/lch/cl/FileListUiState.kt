@@ -3,6 +3,7 @@ package com.lch.cl
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
+import android.widget.CompoundButton
 import androidx.core.content.FileProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -14,14 +15,16 @@ import java.io.File
 
 class FileListUiState(val filePath: String, val vm: FileListVm) {
 
-    fun itemClick(view: View) {
-        val uri = FileProvider.getUriForFile(
-            view.context,
-            "${BuildConfig.APPLICATION_ID}.file.provider", File(filePath)
-        )
-        val type = view.context.contentResolver.getType(uri)
-        log("mime:$type")
 
+    fun checkedChanged(view: View) {
+        if ((view as CompoundButton).isChecked) {
+            vm.checked(filePath)
+        } else {
+            vm.uncheked(filePath)
+        }
+    }
+
+    fun itemClick(view: View) {
 
         val extras = FragmentNavigatorExtras(
             view to "shared_element"
@@ -29,6 +32,11 @@ class FileListUiState(val filePath: String, val vm: FileListVm) {
         val action = MyCoursesFragmentDirections.actionOnboardingToLearn(filePath)
         view.findNavController().navigate(action, extras)
     }
+
+    val isChecked: Boolean by lazy {
+        vm.isChecked(filePath)
+    }
+
 
     val fileName: String? by lazy {
         return@lazy File(filePath).name

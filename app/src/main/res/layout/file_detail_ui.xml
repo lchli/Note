@@ -40,6 +40,13 @@
                 android:layout_marginLeft="10dp"
                 android:src="@mipmap/outline_arrow_back_white_48" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="详情"
+                android:textSize="18sp"
+                android:textColor="#ffffff" />
         </RelativeLayout>
 
         <LinearLayout
@@ -197,7 +204,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:onClick="@{v->state.deleteClick(v)}"
+                android:onClick="@{v->state.showDelDialog(v)}"
                 android:orientation="vertical">
 
                 <ImageView
