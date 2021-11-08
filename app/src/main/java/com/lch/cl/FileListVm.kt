@@ -13,6 +13,7 @@ import java.io.File
 class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
     val state = MutableLiveData<Pair<Boolean, List<String>>>()
     val loading = MutableLiveData(false)
+    val isCheckAll = MutableLiveData(false)
     val checkedLive = MutableLiveData<MutableList<String>>()
     private var finishedList: List<String>? = null
     private var preSort: FileSortType? = null
@@ -41,8 +42,8 @@ class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
     fun isChecked(path: String): Boolean = checked.contains(path)
 
 
-    fun checkedChanged(view: CompoundButton, isChecked: Boolean) {
-        if (isChecked) {
+    fun checkedChanged(view: View) {
+        if ((view as CompoundButton).isChecked) {
             checkedAll()
         } else {
             uncheckedAll()
@@ -98,6 +99,8 @@ class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
 
     fun filter(type: FileFilterType = FileFilterType.Size(10 * 1024 * 1024L)) {
         loading.postValue(true)
+        uncheckedAll()
+        isCheckAll.postValue(false)
 
         viewModelScope.launch(Dispatchers.IO) {
             if (finishedList.isNullOrEmpty()) {
@@ -133,6 +136,9 @@ class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
         if (it == null) {
             return
         }
+        uncheckedAll()
+        isCheckAll.postValue(false)
+
         if (it.first) {//finished
             this.finishedList = it.second
             loading.postValue(false)

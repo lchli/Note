@@ -99,13 +99,19 @@ object FileScanner {
 
 
     fun scanBigFile(f: File) {
-        if (!stopFlag.get()) {
-            log("scan already running============")
-            return
-        }
+        try {
 
-        startScan(f) {
-            it.length() > 1 * 1024 * 1024
+            if (!stopFlag.get()) {
+                log("scan already running============")
+                return
+            }
+
+            startScan(f) {
+                it.length() > 1 * 1024 * 1024
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
 
     }

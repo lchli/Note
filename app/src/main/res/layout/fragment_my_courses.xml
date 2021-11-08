@@ -78,7 +78,8 @@
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/more"
                 style="@style/Widget.App.CheckBox.title"
-                android:onCheckedChanged="@{(view,isChecked)->vm.checkedChanged(view,isChecked)}"
+                android:checked="@{vm.isCheckAll}"
+                android:onClick="@{(view)->vm.checkedChanged(view)}"
                 android:textColor="#ffffff"
                 android:text="全选" />
 
