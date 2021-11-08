@@ -20,7 +20,7 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 android {
     compileSdkVersion 30
     defaultConfig {
-        applicationId 'com.materialstudies.owl'
+        applicationId 'com.lch.cln'
         minSdkVersion 23
         targetSdkVersion 27
         versionCode 1
@@ -28,7 +28,7 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         ndk {
-            abiFilters 'armeabi'
+            abiFilters 'armeabi','armeabi-v7'
         }
     }
 
@@ -102,6 +102,12 @@ dependencies {
     api "com.github.lchli:boxing:1.1.5"
     api "com.github.lchli:LchAudioPlayer:+"
     api "com.github.lchli:LchVideoPlayer:1.1.0"
+
+    // 下面各SDK根据宿主App是否使用相关业务按需引入。
+// 友盟统计SDK
+    implementation  'com.umeng.umsdk:common:9.4.2'// 必选
+    implementation  'com.umeng.umsdk:asms:1.4.0'// 必选
+    implementation  'com.umeng.umsdk:abtest:1.0.0'//使用U-App中ABTest能力，可选
 
 
 
