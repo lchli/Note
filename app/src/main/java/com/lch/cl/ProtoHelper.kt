@@ -1,18 +1,16 @@
 package com.lch.cl
 import android.content.Context
-import android.content.Intent
 import android.text.SpannableStringBuilder
 import android.text.TextPaint
 import android.text.style.ClickableSpan
 import android.text.style.URLSpan
-import android.util.Log
 import android.view.View
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
-import com.blankj.utilcode.util.ToastUtils
-import com.materialstudies.owl.R
-import com.materialstudies.owl.util.log
+
+import com.lch.cl.util.log
+import com.lch.cln.R
 
 object ProtoHelper {
 

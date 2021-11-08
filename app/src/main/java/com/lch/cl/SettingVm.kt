@@ -1,15 +1,11 @@
 package com.lch.cl
 
-import android.os.Build
 import android.view.View
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import com.blankj.utilcode.util.ToastUtils
-import com.materialstudies.owl.BuildConfig
-import com.materialstudies.owl.R
-import com.materialstudies.owl.ui.mycourses.MyCoursesFragmentDirections
-import com.materialstudies.owl.ui.search.SearchFragmentDirections
+import com.lch.cln.BuildConfig
+import com.lch.cln.R
+
 
 class SettingVm : BaseVm() {
     val liveVersion=MutableLiveData<String>()

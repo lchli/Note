@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.TextView;
 
-import com.materialstudies.owl.R;
+import com.lch.cln.R;
 
 
 public class LoadingHelper {

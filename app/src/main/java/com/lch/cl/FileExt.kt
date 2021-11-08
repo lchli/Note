@@ -1,7 +1,7 @@
 package com.lch.cl
 
 import androidx.core.content.FileProvider
-import com.materialstudies.owl.BuildConfig
+import com.lch.cln.BuildConfig
 import java.io.File
 
 fun File.mimeType(): String? {

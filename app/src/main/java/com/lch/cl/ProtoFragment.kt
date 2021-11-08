@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.materialstudies.owl.R
-import com.materialstudies.owl.databinding.ProtoFragmentBinding
-import com.materialstudies.owl.util.transition.MaterialContainerTransition
+import com.lch.cln.databinding.ProtoFragmentBinding
+
 
 class ProtoFragment: Fragment() {
 

@@ -1,16 +1,12 @@
 package com.lch.cl
 
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
-import androidx.core.content.FileProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
-import com.materialstudies.owl.BuildConfig
-import com.materialstudies.owl.R
-import com.materialstudies.owl.ui.mycourses.MyCoursesFragmentDirections
-import com.materialstudies.owl.util.log
+import com.lch.cln.R
+
 import java.io.File
 
 class FileListUiState(val filePath: String, val vm: FileListVm) {
@@ -29,7 +25,7 @@ class FileListUiState(val filePath: String, val vm: FileListVm) {
         val extras = FragmentNavigatorExtras(
             view to "shared_element"
         )
-        val action = MyCoursesFragmentDirections.actionOnboardingToLearn(filePath)
+        val action = FileListFragmentDirections.actionOnboardingToLearn(filePath)
         view.findNavController().navigate(action, extras)
     }
 

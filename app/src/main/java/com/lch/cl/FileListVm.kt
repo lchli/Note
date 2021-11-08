@@ -1,12 +1,10 @@
 package com.lch.cl
 
-import android.Manifest
 import android.app.Activity
 import android.os.Environment
 import android.view.View
 import android.widget.CompoundButton
 import androidx.lifecycle.*
-import com.blankj.utilcode.util.PermissionUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -5,19 +5,12 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
-import android.text.format.DateUtils
-import android.util.Log
 import android.view.View
 import androidx.core.content.FileProvider
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import com.blankj.utilcode.util.TimeUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.materialstudies.owl.BuildConfig
-import com.materialstudies.owl.R
-import com.materialstudies.owl.ui.mycourses.MyCoursesFragmentDirections
-import com.materialstudies.owl.util.log
+import com.lch.cln.BuildConfig
+import com.lch.cln.R
 import java.io.File
 
 class FileDetailUiState(val filePath: String, private val vm: FileDetailVm) {

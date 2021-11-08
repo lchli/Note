@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import com.blankj.utilcode.util.SPUtils
 import com.lch.cln.databinding.ProtoDialogActivityBinding
-import com.materialstudies.owl.databinding.ProtoDialogActivityBinding
 
 class ProtoDialogActivity:AppCompatActivity() {
     private lateinit var binding:ProtoDialogActivityBinding

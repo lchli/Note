@@ -7,14 +7,10 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
-import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.fragment.findNavController
-import com.blankj.utilcode.util.SPUtils
-import com.materialstudies.owl.databinding.ProtoDialogActivityBinding
-import com.materialstudies.owl.databinding.ProtoFragmentBinding
+import com.lch.cln.databinding.ProtoFragmentBinding
 
 class ProtoActivity : AppCompatActivity() {
     private lateinit var binding: ProtoFragmentBinding
