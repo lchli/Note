@@ -11,7 +11,7 @@ import androidx.navigation.fragment.navArgs
 import com.blankj.utilcode.util.BarUtils
 import com.lch.cln.R
 import com.lch.cln.databinding.FileDetailUiBinding
-import com.lch.cl.util.transition.MaterialContainerTransition
+import com.lch.cl.util.MaterialContainerTransition
 
 class FileDetailFragment: BaseAppFragment() {
     private lateinit var binding: FileDetailUiBinding

@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="详情"
+                android:text="detail"
                 android:textSize="18sp"
                 android:textColor="#ffffff" />
         </RelativeLayout>
@@ -74,7 +74,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="文件名称："
+                    android:text="file name："
                     android:textColor="#ffffff" />
 
                 <TextView
@@ -93,7 +93,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="文件大小："
+                    android:text="file size："
                     android:textColor="#ffffff" />
 
                 <TextView
@@ -113,7 +113,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="文件路径："
+                    android:text="file path："
                     android:textColor="#ffffff" />
 
                 <TextView
@@ -135,7 +135,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="修改时间："
+                    android:text="last modify："
                     android:textColor="#ffffff" />
 
                 <TextView
@@ -174,7 +174,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="打开"
+                    android:text="open"
                     android:textColor="#ffffff" />
             </LinearLayout>
 
@@ -195,7 +195,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="发送"
+                    android:text="send"
                     android:textColor="#ffffff" />
             </LinearLayout>
 
@@ -216,7 +216,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="删除"
+                    android:text="delete"
                     android:textColor="#ffffff" />
             </LinearLayout>
 

@@ -27,14 +27,14 @@ class FileDetailVm : BaseVm() {
          loading.postValue(true)
 
          if(FileScanner.del(filePath)){
-             ToastUtils.showLong("删除成功")
+             ToastUtils.showLong("delete success")
              loading.postValue(false)
 
              backClick(view)
          }else{
              loading.postValue(false)
 
-             ToastUtils.showLong("删除失败")
+             ToastUtils.showLong("delete fail.")
          }
 
 
@@ -45,12 +45,12 @@ class FileDetailVm : BaseVm() {
             return
         }
         MaterialAlertDialogBuilder(v.context)
-            .setTitle("提示")
-            .setMessage("文件删除后将无法恢复，是否继续？")
-            .setNegativeButton("取消") { dialog, which ->
+            .setTitle("alert")
+            .setMessage("this file can not recovery after delete,continue?")
+            .setNegativeButton("cancel") { dialog, which ->
                 dialog.dismiss()
             }
-            .setPositiveButton("确定") { dialog, which ->
+            .setPositiveButton("confirm") { dialog, which ->
                 deleteClick(v,filePath)
                 dialog.dismiss()
             }

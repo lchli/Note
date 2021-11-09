@@ -1,10 +1,6 @@
 package com.lch.cl
 
-import android.os.Environment
 import android.os.SystemClock
-import android.util.Log
-import androidx.annotation.UiThread
-import androidx.annotation.WorkerThread
 import androidx.lifecycle.MutableLiveData
 import java.io.File
 import java.util.concurrent.Executors
@@ -180,7 +176,7 @@ object FileScanner {
         fileState.postValue(Pair(stopFlag.get(), ret))
     }
 
-    fun del(path:String):Boolean{//repeat file.todo
+    fun del(path:String):Boolean{
         if (!stopFlag.get()) {
             return false
         }

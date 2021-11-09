@@ -30,13 +30,11 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lch.cl.*
+import com.lch.cl.util.SpringAddItemAnimator
+import com.lch.cl.util.log
 import com.lch.cln.R
 import com.lch.cln.databinding.FileOpPopupBinding
 import com.lch.cln.databinding.FragmentMyCoursesBinding
-
-import com.lch.cl.util.SpringAddItemAnimator
-import com.lch.cl.util.log
-import com.umeng.analytics.pro.ca
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -144,7 +142,7 @@ class FileListFragment : Fragment() {
 
         noteListVm.loading.observe(viewLifecycleOwner) {
             if (it) {
-                loading.showLoading(requireActivity(), "正在扫描中，请稍等...")
+                loading.showLoading(requireActivity(), "scanning,please waiting...")
             } else {
                 loading.hideLoading()
             }
@@ -187,15 +185,15 @@ class FileListFragment : Fragment() {
         }
 
         dialog=MaterialAlertDialogBuilder(requireActivity())
-            .setTitle("提示")
-            .setMessage("文件扫描需要授权读取手机存储的权限，是否继续？")
+            .setTitle("alert")
+            .setMessage("file scanner need read external storage permission,continue?")
             .setOnDismissListener {
                 dialog=null
             }
-            .setNegativeButton("取消") { dialog, which ->
+            .setNegativeButton("cancel") { dialog, which ->
                 dialog.dismiss()
             }
-            .setPositiveButton("继续") { dialog, which ->
+            .setPositiveButton("continue") { dialog, which ->
                 openPermission()
                 dialog.dismiss()
             }.create()
@@ -228,7 +226,7 @@ class FileListFragment : Fragment() {
                         deniedForever: MutableList<String>,
                         denied: MutableList<String>
                     ) {
-                        ToastUtils.showLong("授权失败")
+                        ToastUtils.showLong("grant permission fail.")
                         SPUtils.getInstance().put(SpKey.is_per_denyed,true)
                     }
 
@@ -252,10 +250,10 @@ class FileListFragment : Fragment() {
 
 
     private fun doFilter() {
-        val items = arrayOf("无", "文件大小", "文件类型", "修改时间")
+        val items = arrayOf("none", "file size", "file type", "file last modify time")
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("选择过滤方式")
+            .setTitle("choose filter way")
             .setItems(items) { dialog, which ->
                 when (which) {
                     0 -> noteListVm.filter(FileFilterType.No)
@@ -271,7 +269,7 @@ class FileListFragment : Fragment() {
         val items = arrayOf("10m", "100m", "500m", "1g")
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("选择文件大小")
+            .setTitle("choose file size")
             .setItems(items) { dialog, which ->
                 when (which) {
                     0 -> noteListVm.filter(FileFilterType.Size(10 * 1024 * 1024L))
@@ -284,10 +282,10 @@ class FileListFragment : Fragment() {
     }
 
     private fun filterByType() {
-        val items = arrayOf("视频", "音频", "图片", "压缩文件", "PDF", "文档", "apk", "其它")
+        val items = arrayOf("video", "audio", "image", "zip", "PDF", "doc", "apk", "other")
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("选择类型")
+            .setTitle("choose file type")
             .setItems(items) { dialog, which ->
                 when (which) {
                     0 -> noteListVm.filter(FileFilterType.Category(Mime.Video))
@@ -306,7 +304,7 @@ class FileListFragment : Fragment() {
     private fun filterByDate() {
         val dateRangePicker =
             MaterialDatePicker.Builder.dateRangePicker()
-                .setTitleText("选择日期范围")
+                .setTitleText("please choose date range")
                 .setSelection(
                     Pair(
                         MaterialDatePicker.thisMonthInUtcMilliseconds(),
@@ -322,10 +320,10 @@ class FileListFragment : Fragment() {
     }
 
     private fun doSort() {
-        val items = arrayOf("文件大小", "修改时间")
+        val items = arrayOf("file size", "file last modify time")
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("选择排序方式")
+            .setTitle("choose sort way")
             .setItems(items) { dialog, which ->
                 when (which) {
                     0 -> sortBySize()
@@ -336,10 +334,10 @@ class FileListFragment : Fragment() {
     }
 
     private fun sortByDate() {
-        val items = arrayOf("升序", "降序")
+        val items = arrayOf("asc", "desc")
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("选择排序方式")
+            .setTitle("choose sort direction")
             .setItems(items) { dialog, which ->
                 when (which) {
                     0 -> noteListVm.sort(FileSortType.Time(FileConst.SORT_DIRECTION_ASC))
@@ -350,10 +348,10 @@ class FileListFragment : Fragment() {
     }
 
     private fun sortBySize() {
-        val items = arrayOf("升序", "降序")
+        val items = arrayOf("asc", "desc")
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("选择排序方式")
+            .setTitle("choose sort direction")
             .setItems(items) { dialog, which ->
                 when (which) {
                     0 -> noteListVm.sort(FileSortType.Size(FileConst.SORT_DIRECTION_ASC))

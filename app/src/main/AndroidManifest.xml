@@ -7,16 +7,12 @@
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
-  <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-  <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
   <application
       android:allowBackup="true"
-      android:icon="@mipmap/ic_launcher"
-      android:label="@string/app_name"
+      android:icon="@drawable/ic_logo"
+      android:label="file clean manager"
       android:name="com.lch.ClnApplication"
       android:supportsRtl="true"
       android:theme="@style/Owl.Blue"
@@ -37,13 +33,9 @@
     </activity>
 
 
-
     <activity android:name="com.lch.cl.MainActivity"/>
-    <activity android:name="com.lch.cl.ProtoActivity"/>
-    <activity android:name="com.lch.cl.Splash"/>
-    <activity android:name="com.lch.cl.ProtoDialogActivity"/>
 
-    <!--Preload custom fonts-->
+
     <meta-data
         android:name="preloaded_fonts"
         android:resource="@array/preloaded_fonts"/>

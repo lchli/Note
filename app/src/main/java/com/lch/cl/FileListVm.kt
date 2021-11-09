@@ -20,7 +20,7 @@ class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
     private var preFilter: FileFilterType? = null
     private val checked = mutableListOf<String>()
     val checkedCount: LiveData<String> = Transformations.map(checkedLive) {
-        "已选择${it.size}项"
+        "choosed ${it.size} items"
     }
 
     val delEnable: LiveData<Boolean> = Transformations.map(checkedLive) {
@@ -205,12 +205,12 @@ class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
             return
         }
         MaterialAlertDialogBuilder(context!!)
-            .setTitle("提示")
-            .setMessage("文件删除后将无法恢复，是否继续？")
-            .setNegativeButton("取消") { dialog, which ->
+            .setTitle("alert")
+            .setMessage("these file can not recovery after delete,continue?")
+            .setNegativeButton("cancel") { dialog, which ->
                 dialog.dismiss()
             }
-            .setPositiveButton("确定") { dialog, which ->
+            .setPositiveButton("continue") { dialog, which ->
                 deleteChecked()
                 dialog.dismiss()
             }

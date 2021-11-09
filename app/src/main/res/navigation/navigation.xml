@@ -26,11 +26,6 @@
       android:label="fragment_search"
       tools:layout="@layout/fragment_search">
 
-    <action
-        android:id="@+id/action_setting_to_proto"
-        app:destination="@id/proto"
-        app:popUpTo="@+id/search"
-        />
   </fragment>
 
   <fragment
@@ -44,20 +39,6 @@
 
   </fragment>
 
-
-
-  <fragment
-      android:id="@+id/proto"
-      android:name="com.lch.cl.ProtoFragment"
-      android:label="fragment_proto"
-      tools:layout="@layout/proto_fragment">
-    <argument
-        android:name="title"
-        app:argType="string"/>
-    <argument
-        android:name="content"
-        app:argType="string"/>
-  </fragment>
 
 
 </navigation>

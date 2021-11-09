@@ -59,7 +59,7 @@ class FileDetailUiState(val filePath: String, private val vm: FileDetailVm) {
             v.context.startActivity(intent)
         } catch (e: Throwable) {
             e.printStackTrace()
-            ToastUtils.showLong("未找到能打开文件的应用")
+            ToastUtils.showLong("no found app to open this file.")
         }
     }
 

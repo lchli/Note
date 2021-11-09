@@ -19,7 +19,7 @@ public class LoadingHelper {
 
 
     public void showLoading(Activity activity) {
-        showLoading(activity, "正在加载中，请稍等");
+        showLoading(activity, "loading,please waiting...");
     }
 
     public void showLoading(Activity activity, String msg) {
