@@ -24,6 +24,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.*
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lch.cl.*
@@ -32,6 +35,8 @@ import com.lch.cln.databinding.FileOpPopupBinding
 import com.lch.cln.databinding.FragmentMyCoursesBinding
 
 import com.lch.cl.util.SpringAddItemAnimator
+import com.lch.cl.util.log
+import com.umeng.analytics.pro.ca
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -147,6 +152,21 @@ class FileListFragment : Fragment() {
         noteListVm.checkedLive.observe(viewLifecycleOwner) {
             mMyCoursesAdapter.notifyDataSetChanged()
         }
+
+        //ca-app-pub-8172306410323796/5296481216
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.adListener=object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+               log("onAdLoaded")
+            }
+
+            override fun onAdFailedToLoad(p0: LoadAdError) {
+                super.onAdFailedToLoad(p0)
+                log("onAdFailedToLoad:$p0")
+            }
+        }
+        binding.adView.loadAd(adRequest)
 
     }
 

@@ -58,3 +58,6 @@ public static final int *;
 
 # Uncomment for DexGuard only
 #-keepresourcexmlelements manifest/application/meta-data@value=GlideModule
+
+-keep class com.google.ads.** #
+-dontwarn com.google.ads.** #

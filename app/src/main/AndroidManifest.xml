@@ -23,6 +23,10 @@
       android:requestLegacyExternalStorage="true"
       tools:ignore="GoogleAppIndexingWarning">
 
+    <meta-data
+        android:name="com.google.android.gms.ads.APPLICATION_ID"
+        android:value="ca-app-pub-8172306410323796~1636437800"/>
+
     <activity
         android:name="com.lch.cl.Launcher"
         android:theme="@style/Owl.Blue">

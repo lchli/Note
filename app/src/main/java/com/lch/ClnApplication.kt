@@ -7,6 +7,7 @@ import android.os.Build.VERSION_CODES.Q
 import android.os.Environment
 import androidx.appcompat.app.AppCompatDelegate
 import com.blankj.utilcode.util.SPUtils
+import com.google.android.gms.ads.MobileAds
 import com.lch.cl.Contexter
 import com.lch.cl.FileScanner
 import com.lch.cl.SpKey
@@ -51,6 +52,7 @@ class ClnApplication : Application() {
             UMUtil.init(this)
         }
 
+        MobileAds.initialize(this) {}
 
 
 
