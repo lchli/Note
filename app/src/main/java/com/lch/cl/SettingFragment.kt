@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.lch.cl.ad.InterAdUtil
+import com.lch.cl.util.ActivityScopeStore
 import com.lch.cln.databinding.FragmentSearchBinding
 
 class SettingFragment : Fragment() {
@@ -29,5 +31,12 @@ class SettingFragment : Fragment() {
         binding.lifecycleOwner=viewLifecycleOwner
         binding.state=vm
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val mInterAdUtil= ActivityScopeStore.of(MainActivity::class.java)[InterAdUtil::class.java]
+        (mInterAdUtil as? InterAdUtil)?.show(requireActivity())
     }
 }

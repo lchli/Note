@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.ui.setupWithNavController
+import com.lch.cl.ad.InterAdUtil
+import com.lch.cl.ad.RewardAdUtil
+import com.lch.cl.util.ActivityScopeStore
 import com.lch.cln.R
 import com.lch.cln.databinding.ActivityMainBinding
 import com.lch.cl.util.contentView
@@ -25,6 +28,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setupWindow(this)
 
+        ActivityScopeStore.of(this::class.java)[RewardAdUtil::class.java] = RewardAdUtil()
+        ActivityScopeStore.of(this::class.java)[InterAdUtil::class.java] = InterAdUtil()
+
         binding.apply {
 
             val navController = Navigation.findNavController(this@MainActivity, R.id.nav_host)
@@ -34,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launchWhenResumed {
                 navController.addOnDestinationChangedListener { _, destination, _ ->
                     when (destination.id) {
-                        R.id.onboarding, R.id.featured, R.id.search -> bottomNav.show()
+                        R.id.onboarding, R.id.search -> bottomNav.show()
                         else ->  bottomNav.hide()
                     }
                 }
@@ -50,4 +56,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
 }

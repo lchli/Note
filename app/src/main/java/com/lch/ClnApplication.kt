@@ -7,9 +7,7 @@ import com.google.android.gms.ads.MobileAds
 import com.lch.cl.Contexter
 import com.lch.cl.FileScanner
 import com.lch.cl.ad.AppOpenManager
-
-
-
+import com.lch.cl.util.AppLifeCycle
 
 
 class ClnApplication : Application() {
@@ -21,6 +19,7 @@ class ClnApplication : Application() {
             Thread.UncaughtExceptionHandler { _, e -> e.printStackTrace() }
 
         Contexter.bindContext(this)
+        registerActivityLifecycleCallbacks(AppLifeCycle())
 
         FileScanner.scanBigFile(Environment.getExternalStorageDirectory())
 

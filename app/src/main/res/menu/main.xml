@@ -7,10 +7,10 @@
       android:title="clean"
       android:icon="@drawable/asl_my_courses"/>
 
-  <item
-      android:id="@+id/featured"
-      android:title="discovery"
-      android:icon="@drawable/asl_featured"/>
+<!--  <item-->
+<!--      android:id="@+id/featured"-->
+<!--      android:title="discovery"-->
+<!--      android:icon="@drawable/asl_featured"/>-->
 
   <item
       android:id="@+id/search"

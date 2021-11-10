@@ -1,4 +1,3 @@
-
 package com.lch.cl
 
 import android.Manifest
@@ -24,12 +23,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.*
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.*
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lch.cl.*
+import com.lch.cl.ad.AdIds
 import com.lch.cl.util.SpringAddItemAnimator
 import com.lch.cl.util.log
 import com.lch.cln.R
@@ -43,7 +41,7 @@ class FileListFragment : Fragment() {
     private lateinit var mMyCoursesAdapter: MyCoursesAdapter
     private lateinit var binding: FragmentMyCoursesBinding
     private val loading = LoadingHelper()
-    private var dialog:Dialog?=null
+    private var dialog: Dialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -117,11 +115,11 @@ class FileListFragment : Fragment() {
 
         noteListVm.state.observe(viewLifecycleOwner) { pair ->
             if (hasSdPermission().not()) {
-                binding.emptyContainer.visibility=View.VISIBLE
+                binding.emptyContainer.visibility = View.VISIBLE
                 return@observe
             }
 
-            binding.emptyContainer.visibility=View.GONE
+            binding.emptyContainer.visibility = View.GONE
 
             mMyCoursesAdapter.submitList(pair.second)
 
@@ -151,20 +149,32 @@ class FileListFragment : Fragment() {
             mMyCoursesAdapter.notifyDataSetChanged()
         }
 
-        //ca-app-pub-8172306410323796/5296481216
-        val adRequest = AdRequest.Builder().build()
-        binding.adView.adListener=object : AdListener() {
-            override fun onAdLoaded() {
-                super.onAdLoaded()
-               log("onAdLoaded")
-            }
+        loadBannerAd()
+    }
 
-            override fun onAdFailedToLoad(p0: LoadAdError) {
-                super.onAdFailedToLoad(p0)
-                log("onAdFailedToLoad:$p0")
+    private fun loadBannerAd() {
+        try {
+
+            val adView = AdView(requireActivity())
+            adView.adSize = AdSize.BANNER
+            adView.adUnitId = AdIds.banner_ad
+            adView.adListener = object : AdListener() {
+                override fun onAdLoaded() {
+                    super.onAdLoaded()
+                    log("onAdLoaded")
+                }
+
+                override fun onAdFailedToLoad(p0: LoadAdError) {
+                    super.onAdFailedToLoad(p0)
+                    log("onAdFailedToLoad:$p0")
+                }
             }
+            binding.adContainer.addView(adView)
+
+            adView.loadAd(AdRequest.Builder().build())
+
+        } catch (e: Exception) {
         }
-        binding.adView.loadAd(adRequest)
 
     }
 
@@ -173,22 +183,22 @@ class FileListFragment : Fragment() {
         tryRefresh()
     }
 
-    private fun tryRefresh(){
-        if(hasSdPermission()){
+    private fun tryRefresh() {
+        if (hasSdPermission()) {
             noteListVm.listenScan()
         }
     }
 
     private fun showNoPermission() {
-        if(dialog!=null&&dialog!!.isShowing){
+        if (dialog != null && dialog!!.isShowing) {
             return
         }
 
-        dialog=MaterialAlertDialogBuilder(requireActivity())
+        dialog = MaterialAlertDialogBuilder(requireActivity())
             .setTitle("alert")
             .setMessage("file scanner need read external storage permission,continue?")
             .setOnDismissListener {
-                dialog=null
+                dialog = null
             }
             .setNegativeButton("cancel") { dialog, which ->
                 dialog.dismiss()
@@ -201,7 +211,6 @@ class FileListFragment : Fragment() {
         dialog?.show()
 
 
-
     }
 
     override fun onDestroy() {
@@ -211,8 +220,12 @@ class FileListFragment : Fragment() {
 
     private fun openPermission() {
         if (Build.VERSION.SDK_INT < 30) {
-            if(!ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE)&&
-                SPUtils.getInstance().getBoolean(SpKey.is_per_denyed,false)){
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(
+                    requireActivity(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) &&
+                SPUtils.getInstance().getBoolean(SpKey.is_per_denyed, false)
+            ) {
                 PermissionUtils.launchAppDetailsSettings()
                 return
             }
@@ -227,7 +240,7 @@ class FileListFragment : Fragment() {
                         denied: MutableList<String>
                     ) {
                         ToastUtils.showLong("grant permission fail.")
-                        SPUtils.getInstance().put(SpKey.is_per_denyed,true)
+                        SPUtils.getInstance().put(SpKey.is_per_denyed, true)
                     }
 
                 }).request()
@@ -362,7 +375,7 @@ class FileListFragment : Fragment() {
     }
 
     private fun doRefresh() {
-        if(hasSdPermission()) {
+        if (hasSdPermission()) {
             noteListVm.refresh()
         }
     }

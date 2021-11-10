@@ -12,7 +12,7 @@
   <application
       android:allowBackup="true"
       android:icon="@drawable/ic_logo"
-      android:label="file clean manager"
+      android:label="FileCleaner"
       android:name="com.lch.ClnApplication"
       android:supportsRtl="true"
       android:theme="@style/Owl.Blue"

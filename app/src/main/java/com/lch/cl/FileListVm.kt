@@ -6,6 +6,8 @@ import android.view.View
 import android.widget.CompoundButton
 import androidx.lifecycle.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.lch.cl.ad.RewardAdUtil
+import com.lch.cl.util.ActivityScopeStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -53,9 +55,9 @@ class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
 
     fun listenScan() {
         loading.value = true
-        if(FileScanner.isHaveData()) {
+        if (FileScanner.isHaveData()) {
             FileScanner.sendDataChanged()
-        }else{
+        } else {
             refresh()
         }
     }
@@ -200,6 +202,19 @@ class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
 
     }
 
+    private fun loadDelAd() {
+        if (context == null) {
+            deleteChecked()
+            return
+        }
+
+        (ActivityScopeStore.of(MainActivity::class.java)[RewardAdUtil::class.java] as? RewardAdUtil)?.show(
+            context!!
+        ) {
+            deleteChecked()
+        }
+    }
+
     fun showDelDialog(v: View) {
         if (context !is Activity) {
             return
@@ -211,7 +226,7 @@ class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
                 dialog.dismiss()
             }
             .setPositiveButton("continue") { dialog, which ->
-                deleteChecked()
+                loadDelAd()
                 dialog.dismiss()
             }
             .show()
