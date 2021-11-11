@@ -65,7 +65,7 @@ class FileListFragment : Fragment() {
         binding.vm = noteListVm
 
         binding.emptyContainer.setOnClickListener {
-            showNoPermission()
+            emptyClick()
         }
 
         mMyCoursesAdapter = MyCoursesAdapter(noteListVm)
@@ -115,10 +115,19 @@ class FileListFragment : Fragment() {
 
 
         noteListVm.state.observe(viewLifecycleOwner) { pair ->
-            if (hasSdPermission().not()) {
+
+            if(!NetworkUtils.isConnected()){
                 binding.emptyContainer.visibility = View.VISIBLE
+                binding.emptyText.setText(R.string.no_network)
                 return@observe
             }
+
+            if (hasSdPermission().not()) {
+                binding.emptyContainer.visibility = View.VISIBLE
+                binding.emptyText.setText(R.string.click_request_permission)
+                return@observe
+            }
+
 
             binding.emptyContainer.visibility = View.GONE
 
@@ -185,10 +194,29 @@ class FileListFragment : Fragment() {
     }
 
     private fun tryRefresh() {
+        if(!NetworkUtils.isConnected()){
+            ToastUtils.showLong(R.string.no_network)
+            return
+        }
+
         if (hasSdPermission()) {
             noteListVm.listenScan()
         }
     }
+
+    private fun emptyClick(){
+        if(!NetworkUtils.isConnected()){
+            ToastUtils.showLong(R.string.no_network)
+            return
+        }
+
+        if (hasSdPermission()) {
+            noteListVm.listenScan()
+        }else{
+            showNoPermission()
+        }
+    }
+
 
     private fun showNoPermission() {
         if (dialog != null && dialog!!.isShowing) {

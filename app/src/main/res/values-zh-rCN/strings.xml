@@ -40,6 +40,7 @@
 	<string name="clean_tab">清理</string>
 	<string name="setting_tab">设置</string>
 	<string name="my_app_name">文件清理器</string>
+	<string name="no_network">无网络连接，请连接网络</string>
 
 	<string-array name="filter_way">
 		<item>无</item>

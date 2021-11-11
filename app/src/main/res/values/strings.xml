@@ -74,6 +74,7 @@
         <item>desc</item>
     </string-array>
 
-    <string name="clean_tab">清理</string>
-    <string name="setting_tab">设置</string>
+    <string name="clean_tab">clean</string>
+    <string name="setting_tab">setting</string>
+    <string name="no_network">no network</string>
 </resources>
