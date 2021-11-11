@@ -8,6 +8,9 @@ import androidx.lifecycle.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lch.cl.ad.RewardAdUtil
 import com.lch.cl.util.ActivityScopeStore
+import com.lch.cl.util.getStrings
+import com.lch.cl.util.log
+import com.lch.cln.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -22,7 +25,7 @@ class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
     private var preFilter: FileFilterType? = null
     private val checked = mutableListOf<String>()
     val checkedCount: LiveData<String> = Transformations.map(checkedLive) {
-        "choosed ${it.size} items"
+       context?.getString(R.string.choosed_items,it.size)
     }
 
     val delEnable: LiveData<Boolean> = Transformations.map(checkedLive) {
@@ -204,6 +207,7 @@ class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
 
     private fun loadDelAd() {
         if (context == null) {
+            log("loadDelAd context == null")
             deleteChecked()
             return
         }
@@ -220,12 +224,12 @@ class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
             return
         }
         MaterialAlertDialogBuilder(context!!)
-            .setTitle("alert")
-            .setMessage("these file can not recovery after delete,continue?")
-            .setNegativeButton("cancel") { dialog, which ->
+            .setTitle(getStrings(R.string.alert))
+            .setMessage(getStrings(R.string.cannot_recovery))
+            .setNegativeButton(getStrings(R.string.cancel)) { dialog, which ->
                 dialog.dismiss()
             }
-            .setPositiveButton("continue") { dialog, which ->
+            .setPositiveButton(getStrings(R.string.continues)) { dialog, which ->
                 loadDelAd()
                 dialog.dismiss()
             }

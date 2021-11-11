@@ -11,6 +11,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lch.cl.ad.InterAdUtil
 import com.lch.cl.ad.RewardAdUtil
 import com.lch.cl.util.ActivityScopeStore
+import com.lch.cl.util.getStrings
+import com.lch.cln.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -31,14 +33,14 @@ class FileDetailVm : BaseVm() {
         loading.postValue(true)
 
         if (FileScanner.del(filePath)) {
-            ToastUtils.showLong("delete success")
+            ToastUtils.showLong(R.string.del_success)
             loading.postValue(false)
 
             backClick(view)
         } else {
             loading.postValue(false)
 
-            ToastUtils.showLong("delete fail.")
+            ToastUtils.showLong(R.string.del_fail)
         }
 
 
@@ -62,12 +64,12 @@ class FileDetailVm : BaseVm() {
             return
         }
         MaterialAlertDialogBuilder(v.context)
-            .setTitle("alert")
-            .setMessage("this file can not recovery after delete,continue?")
-            .setNegativeButton("cancel") { dialog, which ->
+            .setTitle(getStrings(R.string.alert))
+            .setMessage(getStrings(R.string.cannot_recovery))
+            .setNegativeButton(getStrings(R.string.cancel)) { dialog, which ->
                 dialog.dismiss()
             }
-            .setPositiveButton("confirm") { dialog, which ->
+            .setPositiveButton(getStrings(R.string.continues)) { dialog, which ->
                 loadDelAd(v, filePath)
                 dialog.dismiss()
             }

@@ -10,12 +10,12 @@ import com.lch.cln.R
 class SettingVm : BaseVm() {
     val liveVersion=MutableLiveData<String>()
 
-    init {
-        liveVersion.postValue("app version：${BuildConfig.VERSION_NAME}")
+    fun init(){
+        liveVersion.postValue(context?.getString(R.string.app_version,BuildConfig.VERSION_NAME))
     }
 
     fun checkUpdateClick(v:View){
-        ToastUtils.showLong("Already the latest version")
+        ToastUtils.showLong(R.string.app_latest)
     }
 
 }

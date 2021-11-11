@@ -28,8 +28,11 @@ class SettingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        vm.attachContext(requireActivity())
         binding.lifecycleOwner=viewLifecycleOwner
         binding.state=vm
+
+        vm.init()
 
     }
 

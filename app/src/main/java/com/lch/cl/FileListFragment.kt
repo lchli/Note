@@ -29,6 +29,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lch.cl.*
 import com.lch.cl.ad.AdIds
 import com.lch.cl.util.SpringAddItemAnimator
+import com.lch.cl.util.getStrings
 import com.lch.cl.util.log
 import com.lch.cln.R
 import com.lch.cln.databinding.FileOpPopupBinding
@@ -140,7 +141,7 @@ class FileListFragment : Fragment() {
 
         noteListVm.loading.observe(viewLifecycleOwner) {
             if (it) {
-                loading.showLoading(requireActivity(), "scanning,please waiting...")
+                loading.showLoading(requireActivity(), getStrings(R.string.scanning))
             } else {
                 loading.hideLoading()
             }
@@ -195,15 +196,15 @@ class FileListFragment : Fragment() {
         }
 
         dialog = MaterialAlertDialogBuilder(requireActivity())
-            .setTitle("alert")
-            .setMessage("file scanner need read external storage permission,continue?")
+            .setTitle(getStrings(R.string.alert))
+            .setMessage(getStrings(R.string.need_permission))
             .setOnDismissListener {
                 dialog = null
             }
-            .setNegativeButton("cancel") { dialog, which ->
+            .setNegativeButton(getStrings(R.string.cancel)) { dialog, which ->
                 dialog.dismiss()
             }
-            .setPositiveButton("continue") { dialog, which ->
+            .setPositiveButton(getStrings(R.string.continues)) { dialog, which ->
                 openPermission()
                 dialog.dismiss()
             }.create()
@@ -239,7 +240,7 @@ class FileListFragment : Fragment() {
                         deniedForever: MutableList<String>,
                         denied: MutableList<String>
                     ) {
-                        ToastUtils.showLong("grant permission fail.")
+                        ToastUtils.showLong(R.string.grant_permission_fail)
                         SPUtils.getInstance().put(SpKey.is_per_denyed, true)
                     }
 
@@ -263,10 +264,10 @@ class FileListFragment : Fragment() {
 
 
     private fun doFilter() {
-        val items = arrayOf("none", "file size", "file type", "file last modify time")
+        val items = resources.getStringArray(R.array.filter_way)
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("choose filter way")
+            .setTitle(getStrings(R.string.choose_filter_way))
             .setItems(items) { dialog, which ->
                 when (which) {
                     0 -> noteListVm.filter(FileFilterType.No)
@@ -279,10 +280,10 @@ class FileListFragment : Fragment() {
     }
 
     private fun filterBySize() {
-        val items = arrayOf("10m", "100m", "500m", "1g")
+        val items =  resources.getStringArray(R.array.filter_size)
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("choose file size")
+            .setTitle(getStrings(R.string.choose_filter_size))
             .setItems(items) { dialog, which ->
                 when (which) {
                     0 -> noteListVm.filter(FileFilterType.Size(10 * 1024 * 1024L))
@@ -295,10 +296,10 @@ class FileListFragment : Fragment() {
     }
 
     private fun filterByType() {
-        val items = arrayOf("video", "audio", "image", "zip", "PDF", "doc", "apk", "other")
+        val items = resources.getStringArray(R.array.filter_type)
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("choose file type")
+            .setTitle(getStrings(R.string.choose_filter_type))
             .setItems(items) { dialog, which ->
                 when (which) {
                     0 -> noteListVm.filter(FileFilterType.Category(Mime.Video))
@@ -317,7 +318,7 @@ class FileListFragment : Fragment() {
     private fun filterByDate() {
         val dateRangePicker =
             MaterialDatePicker.Builder.dateRangePicker()
-                .setTitleText("please choose date range")
+                .setTitleText(getStrings(R.string.choose_date_range))
                 .setSelection(
                     Pair(
                         MaterialDatePicker.thisMonthInUtcMilliseconds(),
@@ -333,10 +334,10 @@ class FileListFragment : Fragment() {
     }
 
     private fun doSort() {
-        val items = arrayOf("file size", "file last modify time")
+        val items =resources.getStringArray(R.array.sort_way)
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("choose sort way")
+            .setTitle(getStrings(R.string.choose_sort_way))
             .setItems(items) { dialog, which ->
                 when (which) {
                     0 -> sortBySize()
@@ -347,10 +348,10 @@ class FileListFragment : Fragment() {
     }
 
     private fun sortByDate() {
-        val items = arrayOf("asc", "desc")
+        val items =resources.getStringArray(R.array.sort_direction)
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("choose sort direction")
+            .setTitle(getStrings(R.string.choose_sort_direction))
             .setItems(items) { dialog, which ->
                 when (which) {
                     0 -> noteListVm.sort(FileSortType.Time(FileConst.SORT_DIRECTION_ASC))
@@ -361,10 +362,10 @@ class FileListFragment : Fragment() {
     }
 
     private fun sortBySize() {
-        val items = arrayOf("asc", "desc")
+        val items =resources.getStringArray(R.array.sort_direction)
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("choose sort direction")
+            .setTitle(getStrings(R.string.choose_sort_direction))
             .setItems(items) { dialog, which ->
                 when (which) {
                     0 -> noteListVm.sort(FileSortType.Size(FileConst.SORT_DIRECTION_ASC))

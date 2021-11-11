@@ -6,6 +6,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.OnUserEarnedRewardListener
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.lch.cl.util.log
 
 class RewardAdUtil(
     private val adId: String = AdIds.reward_ad
@@ -44,11 +45,13 @@ class RewardAdUtil(
 
                 override fun onAdLoaded(p0: RewardedAd) {
                     super.onAdLoaded(p0)
+                    log(" Rewarded loaded==")
                     rewardedAd = p0
                 }
 
                 override fun onAdFailedToLoad(p0: LoadAdError) {
                     super.onAdFailedToLoad(p0)
+                    log(" Rewarded LoadAdError:$p0")
                     rewardedAd = null
                 }
             }

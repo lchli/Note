@@ -12,7 +12,7 @@
   <application
       android:allowBackup="true"
       android:icon="@drawable/ic_logo"
-      android:label="FileCleaner"
+      android:label="@string/my_app_name"
       android:name="com.lch.ClnApplication"
       android:supportsRtl="true"
       android:theme="@style/Owl.Blue"
@@ -33,7 +33,7 @@
     </activity>
 
 
-    <activity android:name="com.lch.cl.MainActivity"/>
+    <activity android:name="com.lch.cl.MainActivity" android:launchMode="singleTask"/>
 
 
     <meta-data

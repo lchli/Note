@@ -1,0 +1,76 @@
+<resources>
+	<string name="no_found_app">未找到能打开此文件的应用</string>
+	<string name="del_success">删除成功</string>
+	<string name="del_fail">删除失败</string>
+	<string name="delete">删除</string>
+	<string name="click_request_permission">扫描文件需要授予存储权限，请点击此处开启</string>
+	<string name="choosed_items">已选择%d项</string>
+	<string name="alert">提示</string>
+	<string name="detail">详情</string>
+	<string name="cancel">取消</string>
+	<string name="continues">继续</string>
+	<string name="scanning">正在扫描，请稍等...</string>
+	<string name="cannot_recovery">文件一旦删除将无法恢复，是否继续?</string>
+	<string name="need_permission">扫描文件需要授予存储权限,是否继续?</string>
+	<string name="grant_permission_fail">授权失败</string>
+	<string name="none">无</string>
+	<string name="open">打开</string>
+	<string name="send">发送</string>
+	<string name="setting">设置</string>
+	<string name="check_update">检查更新</string>
+	<string name="filter">过滤</string>
+	<string name="sort">排序</string>
+	<string name="refresh">刷新</string>
+	<string name="file_size">文件大小:</string>
+	<string name="file_type">文件类型:</string>
+	<string name="file_name">文件名字:</string>
+	<string name="file_path">文件路径:</string>
+	<string name="file_last_modify_time">最后修改:</string>
+	<string name="choose_filter_way">选择过滤方式</string>
+	<string name="choose_sort_way">选择排序方式</string>
+	<string name="choose_filter_size">选择文件大小</string>
+	<string name="choose_filter_type">选择文件类型</string>
+	<string name="choose_date_range">选择日期范围</string>
+	<string name="choose_sort_direction">选择排序方向</string>
+	<string name="asc">升序</string>
+	<string name="desc">降序</string>
+	<string name="app_version">应用版本:%s</string>
+	<string name="app_latest">版本已经最新</string>
+	<string name="select_all">全部选择</string>
+	<string name="clean_tab">清理</string>
+	<string name="setting_tab">设置</string>
+	<string name="my_app_name">文件清理器</string>
+
+	<string-array name="filter_way">
+		<item>无</item>
+		<item>文件大小</item>
+		<item>文件类型</item>
+		<item>修改时间</item>
+	</string-array>
+	<string-array name="filter_size">
+		<item>10m</item>
+		<item>100m</item>
+		<item>500m</item>
+		<item>1g</item>
+	</string-array>
+
+	<string-array name="filter_type">
+		<item>视频</item>
+		<item>音频</item>
+		<item>图片</item>
+		<item>压缩文件</item>
+		<item>PDF</item>
+		<item>文档</item>
+		<item>安装包</item>
+		<item>其它</item>
+	</string-array>
+
+	<string-array name="sort_way">
+		<item>文件大小</item>
+		<item>修改时间</item>
+	</string-array>
+	<string-array name="sort_direction">
+		<item>升序</item>
+		<item>降序</item>
+	</string-array>
+</resources>
