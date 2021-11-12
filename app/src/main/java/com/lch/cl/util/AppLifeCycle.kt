@@ -25,7 +25,7 @@ class AppLifeCycle:Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityDestroyed(activity: Activity) {
-        ActivityScopeStore.delete(activity::class.java)
+
     }
 
 

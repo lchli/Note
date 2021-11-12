@@ -7,7 +7,7 @@ import android.widget.CompoundButton
 import androidx.lifecycle.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lch.cl.ad.RewardAdUtil
-import com.lch.cl.util.ActivityScopeStore
+import com.lch.cl.util.LifecycleScopeObject
 import com.lch.cl.util.getStrings
 import com.lch.cl.util.log
 import com.lch.cln.R
@@ -212,7 +212,7 @@ class FileListVm : BaseVm(), Observer<Pair<Boolean, MutableList<String>>> {
             return
         }
 
-        (ActivityScopeStore.of(MainActivity::class.java)[RewardAdUtil::class.java] as? RewardAdUtil)?.show(
+        (LifecycleScopeObject.of(MainActivity::class.java).getData(RewardAdUtil::class.java.name) as? RewardAdUtil)?.show(
             context!!
         ) {
             deleteChecked()

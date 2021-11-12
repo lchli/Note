@@ -10,8 +10,7 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
 import com.blankj.utilcode.util.BarUtils
 import com.lch.cl.ad.InterAdUtil
-import com.lch.cl.ad.RewardAdUtil
-import com.lch.cl.util.ActivityScopeStore
+import com.lch.cl.util.LifecycleScopeObject
 import com.lch.cl.util.MaterialContainerTransition
 import com.lch.cln.R
 import com.lch.cln.databinding.FileDetailUiBinding
@@ -68,7 +67,7 @@ class FileDetailFragment: BaseAppFragment() {
 
         mFileDetailVm.load(args.filePath)
 
-        val mInterAdUtil=ActivityScopeStore.of(MainActivity::class.java)[InterAdUtil::class.java]
+        val mInterAdUtil= LifecycleScopeObject.of(MainActivity::class.java).getData(InterAdUtil::javaClass.name)
         (mInterAdUtil as? InterAdUtil)?.show(requireActivity())
     }
 

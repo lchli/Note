@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.lch.cl.ad.InterAdUtil
-import com.lch.cl.util.ActivityScopeStore
+import com.lch.cl.util.LifecycleScopeObject
 import com.lch.cln.databinding.FragmentSearchBinding
 
 class SettingFragment : Fragment() {
@@ -39,7 +39,7 @@ class SettingFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        val mInterAdUtil= ActivityScopeStore.of(MainActivity::class.java)[InterAdUtil::class.java]
+        val mInterAdUtil= LifecycleScopeObject.of(MainActivity::class.java).getData(InterAdUtil::class.java.name)
         (mInterAdUtil as? InterAdUtil)?.show(requireActivity())
     }
 }

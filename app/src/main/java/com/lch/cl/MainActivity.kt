@@ -1,5 +1,3 @@
-
-
 package com.lch.cl
 
 import android.app.Activity
@@ -13,12 +11,9 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.setupWithNavController
 import com.lch.cl.ad.InterAdUtil
 import com.lch.cl.ad.RewardAdUtil
-import com.lch.cl.util.ActivityScopeStore
+import com.lch.cl.util.*
 import com.lch.cln.R
 import com.lch.cln.databinding.ActivityMainBinding
-import com.lch.cl.util.contentView
-import com.lch.cl.util.hide
-import com.lch.cl.util.show
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,8 +23,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setupWindow(this)
 
-        ActivityScopeStore.of(this::class.java)[RewardAdUtil::class.java] = RewardAdUtil()
-        ActivityScopeStore.of(this::class.java)[InterAdUtil::class.java] = InterAdUtil()
+        LifecycleScopeObject.of(this::class.java)
+            .saveData(this, RewardAdUtil::class.java.name, RewardAdUtil())
+        LifecycleScopeObject.of(this::class.java)
+            .saveData(this, InterAdUtil::class.java.name, InterAdUtil())
+
 
         binding.apply {
 
@@ -41,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 navController.addOnDestinationChangedListener { _, destination, _ ->
                     when (destination.id) {
                         R.id.onboarding, R.id.search -> bottomNav.show()
-                        else ->  bottomNav.hide()
+                        else -> bottomNav.hide()
                     }
                 }
             }

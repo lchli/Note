@@ -8,12 +8,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import com.blankj.utilcode.util.ToastUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.lch.cl.ad.InterAdUtil
 import com.lch.cl.ad.RewardAdUtil
-import com.lch.cl.util.ActivityScopeStore
+import com.lch.cl.util.LifecycleScopeObject
 import com.lch.cl.util.getStrings
 import com.lch.cln.R
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class FileDetailVm : BaseVm() {
@@ -52,7 +50,7 @@ class FileDetailVm : BaseVm() {
             return
         }
 
-        (ActivityScopeStore.of(MainActivity::class.java)[RewardAdUtil::class.java] as? RewardAdUtil)?.show(
+        (LifecycleScopeObject.of(MainActivity::class.java).getData(RewardAdUtil::class.java.name) as? RewardAdUtil)?.show(
             context!!
         ) {
             deleteClick(view, filePath)
