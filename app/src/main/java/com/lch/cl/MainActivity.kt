@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         LifecycleScopeObject.of(this::class.java)
             .saveData(this, RewardAdUtil::class.java.name, RewardAdUtil())
+
         LifecycleScopeObject.of(this::class.java)
             .saveData(this, InterAdUtil::class.java.name, InterAdUtil())
 

@@ -15,6 +15,7 @@ class LifecycleScopeObject : LifecycleEventObserver {
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
         if (event == Lifecycle.Event.ON_DESTROY) {
+            log("onStateChanged clear")
             mMap.clear()
             source.lifecycle.removeObserver(this)
         }
@@ -25,6 +26,7 @@ class LifecycleScopeObject : LifecycleEventObserver {
 
         fun of(clazz: Class<out Any>, tag: String = ""): LifecycleScopeObject {
             val key = clazz.name + tag
+            log("key:$key")
             var obj = objectMap[key]
             if (obj == null) {
                 obj = LifecycleScopeObject()

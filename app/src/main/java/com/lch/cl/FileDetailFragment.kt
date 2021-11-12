@@ -12,6 +12,7 @@ import com.blankj.utilcode.util.BarUtils
 import com.lch.cl.ad.InterAdUtil
 import com.lch.cl.util.LifecycleScopeObject
 import com.lch.cl.util.MaterialContainerTransition
+import com.lch.cl.util.log
 import com.lch.cln.R
 import com.lch.cln.databinding.FileDetailUiBinding
 
@@ -67,7 +68,7 @@ class FileDetailFragment: BaseAppFragment() {
 
         mFileDetailVm.load(args.filePath)
 
-        val mInterAdUtil= LifecycleScopeObject.of(MainActivity::class.java).getData(InterAdUtil::javaClass.name)
+        val mInterAdUtil= LifecycleScopeObject.of(MainActivity::class.java).getData(InterAdUtil::class.java.name)
         (mInterAdUtil as? InterAdUtil)?.show(requireActivity())
     }
 

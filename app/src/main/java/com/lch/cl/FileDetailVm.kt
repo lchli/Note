@@ -11,6 +11,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lch.cl.ad.RewardAdUtil
 import com.lch.cl.util.LifecycleScopeObject
 import com.lch.cl.util.getStrings
+import com.lch.cl.util.log
 import com.lch.cln.R
 import kotlinx.coroutines.launch
 
@@ -28,6 +29,8 @@ class FileDetailVm : BaseVm() {
     }
 
     private fun deleteClick(view: View, filePath: String) {
+        log("deleteClick")
+
         loading.postValue(true)
 
         if (FileScanner.del(filePath)) {
@@ -45,14 +48,20 @@ class FileDetailVm : BaseVm() {
     }
 
     private fun loadDelAd(view: View, filePath: String) {
+        log("loadDelAd")
         if (context == null) {
+            log("context == null")
             deleteClick(view, filePath)
             return
         }
+        log("RewardAdUtil java name:${RewardAdUtil::class.java.name}")
+        val mRewardAdUtil=LifecycleScopeObject.of(MainActivity::class.java).getData(RewardAdUtil::class.java.name) as? RewardAdUtil
+        log("mRewardAdUtil:$mRewardAdUtil")
 
-        (LifecycleScopeObject.of(MainActivity::class.java).getData(RewardAdUtil::class.java.name) as? RewardAdUtil)?.show(
+        mRewardAdUtil?.show(
             context!!
         ) {
+            log("loadDelAd finish")
             deleteClick(view, filePath)
         }
     }
@@ -65,9 +74,11 @@ class FileDetailVm : BaseVm() {
             .setTitle(getStrings(R.string.alert))
             .setMessage(getStrings(R.string.cannot_recovery))
             .setNegativeButton(getStrings(R.string.cancel)) { dialog, which ->
+                log("cancel click")
                 dialog.dismiss()
             }
             .setPositiveButton(getStrings(R.string.continues)) { dialog, which ->
+                log("continue click")
                 loadDelAd(v, filePath)
                 dialog.dismiss()
             }
