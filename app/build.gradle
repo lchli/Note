@@ -44,7 +44,7 @@ android {
         debug {
             signingConfig signingConfigs.release
             debuggable true
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -58,6 +58,9 @@ android {
         jvmTarget = "1.8"
     }
 
+    dexOptions {
+        javaMaxHeapSize "3g"
+    }
 
 }
 
@@ -86,6 +89,8 @@ dependencies {
     implementation 'com.blankj:utilcodex:1.30.6'
 
     implementation 'com.google.android.gms:play-services-ads:20.4.0'
+
+    implementation fileTree(dir: "libs", include: ["*.jar","*.aar"])
 
 
 

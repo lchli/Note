@@ -7,11 +7,13 @@ import com.google.android.gms.ads.MobileAds
 import com.lch.cl.Contexter
 import com.lch.cl.FileScanner
 import com.lch.cl.ad.AppOpenManager
+import com.lch.cl.uniad.AppOpenManagerUni
 import com.lch.cl.util.AppLifeCycle
+import io.dcloud.adnative.UniAdManager
 
 
 class ClnApplication : Application() {
-    private lateinit var appOpenManager: AppOpenManager
+    private lateinit var appOpenManager: AppOpenManagerUni
 
     override fun onCreate() {
         super.onCreate()
@@ -24,7 +26,10 @@ class ClnApplication : Application() {
         FileScanner.scanBigFile(Environment.getExternalStorageDirectory())
 
         MobileAds.initialize(this) {}
-        appOpenManager =  AppOpenManager(this);
+        appOpenManager =  AppOpenManagerUni(this);
+
+        val defaultConfig = UniAdManager.obtainDefaultConfig("NA8CFB058", "121861270411")
+        UniAdManager.init(this, defaultConfig)
 
     }
 

@@ -6,4 +6,10 @@
     <cache-path name="internal" path="boxing" />
 
     <external-path name="external" path="DCIM/bili/boxing" />
+
+    <external-path name="tt_external_root" path="." />
+    <external-path name="tt_external_download" path="Download" />
+    <external-files-path name="tt_external_files_download" path="Download" />
+    <files-path name="tt_internal_file_download" path="Download" />
+    <cache-path name="tt_internal_cache_download" path="Download" />
 </paths>
