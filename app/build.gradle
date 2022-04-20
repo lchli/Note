@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: 'com.lch.aop.plugin'
 
 android {
     compileSdkVersion 30
@@ -65,6 +66,9 @@ android {
 }
 
 dependencies {
+    implementation group: 'org.ow2.asm', name: 'asm', version: '7.0'
+    implementation group: 'org.ow2.asm', name: 'asm-commons', version: '7.0'
+
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.fragment:fragment-ktx:1.2.5'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
@@ -92,7 +96,13 @@ dependencies {
 
     implementation fileTree(dir: "libs", include: ["*.jar","*.aar"])
 
+    implementation 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:6.2.7'
 
 
+}
+
+matrix {
+
+    aopVisitors=["com.lch.MyAopVisitor"]
 
 }

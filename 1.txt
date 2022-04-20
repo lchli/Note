@@ -1,0 +1,59 @@
+import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.Attribute;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.ConstantDynamic;
+import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.Handle;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.RecordComponentVisitor;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.TypePath;
+
+public class TvDump implements Opcodes {
+
+    public static byte[] dump() throws Exception {
+
+        ClassWriter classWriter = new ClassWriter(0);
+        FieldVisitor fieldVisitor;
+        RecordComponentVisitor recordComponentVisitor;
+        MethodVisitor methodVisitor;
+        AnnotationVisitor annotationVisitor0;
+
+        classWriter.visit(V11, ACC_PUBLIC | ACC_SUPER, "Tv", null, "Base", null);
+
+        classWriter.visitSource("Tv.java", null);
+
+        {
+            methodVisitor = classWriter.visitMethod(ACC_PUBLIC, "<init>", "(Ljava/lang/Object;)V", null, null);
+            methodVisitor.visitCode();
+            Label label0 = new Label();
+            methodVisitor.visitLabel(label0);
+            methodVisitor.visitLineNumber(3, label0);
+            methodVisitor.visitVarInsn(ALOAD, 0);
+            methodVisitor.visitVarInsn(ALOAD, 1);
+            methodVisitor.visitMethodInsn(INVOKESPECIAL, "Base", "<init>", "(Ljava/lang/Object;)V", false);
+            Label label1 = new Label();
+            methodVisitor.visitLabel(label1);
+            methodVisitor.visitLineNumber(4, label1);
+            methodVisitor.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+            methodVisitor.visitLdcInsn("111");
+            methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+            Label label2 = new Label();
+            methodVisitor.visitLabel(label2);
+            methodVisitor.visitLineNumber(5, label2);
+            methodVisitor.visitInsn(RETURN);
+            Label label3 = new Label();
+            methodVisitor.visitLabel(label3);
+            methodVisitor.visitLocalVariable("this", "LTv;", null, label0, label3, 0);
+            methodVisitor.visitLocalVariable("context", "Ljava/lang/Object;", null, label0, label3, 1);
+            methodVisitor.visitMaxs(2, 2);
+            methodVisitor.visitEnd();
+        }
+        classWriter.visitEnd();
+
+        return classWriter.toByteArray();
+    }
+}
