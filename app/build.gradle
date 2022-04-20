@@ -104,5 +104,8 @@ dependencies {
 matrix {
 
     aopVisitors=["com.lch.MyAopVisitor"]
+    isAopJar=false
+    isAopSrc=true
+
 
 }
